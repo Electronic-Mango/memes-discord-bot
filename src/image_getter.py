@@ -16,12 +16,11 @@ _logger = getLogger(__name__)
 def get_random_image_url() -> str:
     feed_source = _get_random_source()
     feed = parse(feed_source)
-    feed_items = list(feed.entries)
-    random_item = choice(feed_items)
+    random_item = choice(feed.entries)
     media_source = BeautifulSoup(random_item.summary, "html.parser")
     media_elements = media_source.find_all("img")
-    media_sources = [media["src"] for media in media_elements]
-    return choice(media_sources)
+    media_urls = [media["src"] for media in media_elements]
+    return choice(media_urls)
 
 
 def _get_random_source() -> str:
