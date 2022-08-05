@@ -6,7 +6,6 @@ from os import getenv
 from aiohttp import ClientSession
 from io import BytesIO
 from logging import getLogger
-from mimetypes import MimeTypes
 from sys import getsizeof
 
 from discord import File
