@@ -28,7 +28,7 @@ class Get(Cog, name="Get a random meme"):
         while getsizeof(media) > MAX_FILESIZE_BYTES:
             self._logger.info(f"[{url}] [{getsizeof(media)}] exceeds max [{MAX_FILESIZE_BYTES}]")
             media, url = await self._get_media()
-        await context.reply(file=File(media, url))
+        await context.reply(file=File(media, url.split("/")[-1]))
 
     async def _get_media(self) -> tuple[bytes, str]:
         meme_url = get_random_image_url()
