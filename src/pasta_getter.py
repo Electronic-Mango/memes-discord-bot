@@ -12,7 +12,7 @@ _PASTA_RSS_SOURCE = getenv("PASTA_RSS_SOURCE")
 _logger = getLogger(__name__)
 
 
-def get_pasta() -> tuple[str, bool]:
+def get_pasta() -> str:
     feed = parse(_PASTA_RSS_SOURCE)
     random_item = choice(feed.entries)
     _logger.info(f"Using [{random_item.link}] for source")
