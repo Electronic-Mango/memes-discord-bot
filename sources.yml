@@ -1,4 +1,4 @@
-# YAML file containing all RSS media sources.
+# YAML file containing all media sources.
 # Source name is used only for logging purposes.
 source-name-1: some-source-RSS-link
 source-name-2: some-other-source-RSS-link

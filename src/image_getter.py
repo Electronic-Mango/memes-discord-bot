@@ -1,10 +1,9 @@
 from logging import getLogger
 from os import getenv
 from random import choice
+from requests import get
 
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from feedparser import parse
 from yaml import safe_load
 
 load_dotenv()
@@ -15,12 +14,8 @@ _logger = getLogger(__name__)
 
 def get_random_image_url() -> str:
     feed_source = _get_random_source()
-    feed = parse(feed_source)
-    random_item = choice(feed.entries)
-    media_source = BeautifulSoup(random_item.summary, "html.parser")
-    media_elements = media_source.find_all("img")
-    media_urls = [media["src"] for media in media_elements]
-    return choice(media_urls)
+    item = get(feed_source).json()
+    return item["url"]
 
 
 def _get_random_source() -> str:
