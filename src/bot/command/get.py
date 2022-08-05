@@ -25,13 +25,16 @@ class Get(Cog, name="Get a random meme"):
     async def get(self, context: Context) -> None:
         """Get a random meme"""
         media, url = await self._get_media()
-        while getsizeof(media) > MAX_FILESIZE_BYTES or MimeTypes().guess_type(url) == (None, None):
-            self._logger.info(f"Picking different source...")
+        while getsizeof(media) > MAX_FILESIZE_BYTES:
+            self._logger.info(f"[{url}] [{getsizeof(media)}] exceeds max [{MAX_FILESIZE_BYTES}]")
             media, url = await self._get_media()
         await context.reply(file=File(media, url))
 
     async def _get_media(self) -> tuple[bytes, str]:
         meme_url = get_random_image_url()
+        while MimeTypes().guess_type(meme_url) == (None, None):
+            self._logger.info("Invalid extension [{meme_url}], picking new source")
+            meme_url = get_random_image_url()
         media_bytes = await self._download_media(meme_url)
         self._logger.info(f"Trying to send [{meme_url}] [{getsizeof(media_bytes)}] bytes")
         return media_bytes, meme_url
