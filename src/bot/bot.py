@@ -8,6 +8,7 @@ from discord.ext.commands import Bot, when_mentioned_or
 from dotenv import load_dotenv
 
 from bot.command.get import Get
+from bot.command.pasta import Pasta
 from bot.event.on_command import OnCommand
 from bot.event.on_connect import OnConnect
 from bot.event.on_ready import OnReady
@@ -23,4 +24,5 @@ def run_bot() -> None:
     bot.add_cog(OnReady(bot))
     bot.add_cog(OnCommand())
     bot.add_cog(Get())
+    bot.add_cog(Pasta())
     bot.run(DISCORD_BOT_TOKEN)
