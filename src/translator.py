@@ -9,3 +9,7 @@ def translate(source: str, target_language: str) -> str:
 
 def is_valid_language(language: str) -> bool:
     return language in LANGUAGES or language in LANGUAGES.values()
+
+
+def detect_language(source: str) -> str:
+    return _translator.detect(source).lang
