@@ -32,9 +32,6 @@ class Get(Cog, name="Get a random meme"):
 
     async def _get_media(self) -> tuple[bytes, str]:
         meme_url = get_random_image_url()
-        while MimeTypes().guess_type(meme_url) == (None, None):
-            self._logger.info(f"Invalid extension [{meme_url}], picking new source")
-            meme_url = get_random_image_url()
         media_bytes = await self._download_media(meme_url)
         self._logger.info(f"Trying to send [{meme_url}] [{getsizeof(media_bytes)}] bytes")
         return media_bytes, meme_url
