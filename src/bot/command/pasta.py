@@ -40,3 +40,9 @@ class Pasta(Cog, name="Get a random pasta"):
         else:
             self._language = target_language
             await context.reply(f"Set language to **{target_language}**")
+    
+    @command(name="resetlanguage", aliases=["resetlang"])
+    async def reset_language(self, context: Context) -> None:
+        """Reset language for "pasta" command output"""
+        self._language = None
+        await context.reply("Set language to default")
