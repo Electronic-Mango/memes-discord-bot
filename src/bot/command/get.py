@@ -6,6 +6,7 @@ from os import getenv
 from aiohttp import ClientSession
 from io import BytesIO
 from logging import getLogger
+from mimetypes import MimeTypes
 from sys import getsizeof
 
 from discord import File
@@ -24,8 +25,8 @@ class Get(Cog, name="Get a random meme"):
     async def get(self, context: Context) -> None:
         """Get a random meme"""
         media, url = await self._get_media()
-        while getsizeof(media) > MAX_FILESIZE_BYTES:
-            self._logger.info(f"Too large [{url}], max is [{MAX_FILESIZE_BYTES}], trying again")
+        while getsizeof(media) > MAX_FILESIZE_BYTES or MimeTypes().guess_type(url) == (None, None):
+            self._logger.info(f"Picking different source...")
             media, url = await self._get_media()
         await context.reply(file=File(media, url))
 
