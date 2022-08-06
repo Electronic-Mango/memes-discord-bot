@@ -3,8 +3,8 @@ Command Cog sending back a random pasta.
 Output language can be configured with dedicated command.
 """
 
-from os import getenv
 from logging import getLogger
+from os import getenv
 
 from discord.ext.commands import Cog, Context, command
 from discord.utils import escape_markdown
@@ -58,6 +58,7 @@ class Pasta(Cog, name="Get a random pasta"):
         await self._send_pasta(context, pasta)
 
     async def _send_pasta(self, context: Context, pasta: str) -> None:
-        sliced_pasta = sliced(pasta, _MAX_TEXT_MESSAGE_LENGTH)
+        sliced_pasta = sliced(escape_markdown(pasta), _MAX_TEXT_MESSAGE_LENGTH)
+        sliced_pasta = [slice.strip() for slice in sliced_pasta]
         for slice in sliced_pasta:
-            await context.reply(escape_markdown(slice))
+            await context.reply(slice)
