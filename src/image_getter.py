@@ -1,9 +1,9 @@
 from logging import getLogger
 from os import getenv
 from random import choice
-from requests import get
 
 from dotenv import load_dotenv
+from requests import get
 from yaml import safe_load
 
 load_dotenv()

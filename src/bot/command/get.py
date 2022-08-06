@@ -2,10 +2,10 @@
 Command Cog sending back a random meme.
 """
 
-from os import getenv
 from aiohttp import ClientSession
-from io import BytesIO
 from logging import getLogger
+from io import BytesIO
+from os import getenv
 from sys import getsizeof
 
 from discord import File
