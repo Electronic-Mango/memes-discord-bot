@@ -15,7 +15,18 @@ media:
       - other-source-key-2
 
 text:
-  - url: text-source-link
-    # Text for this source will be extracted from JSON retrieved from "text-source-link" directly.
-    # "text-source-link" should return a string.
+  - url: text-source-link-1
+    # Text for this source will be extracted from JSON retrieved from "text-source-link-1" directly.
+    # "text-source-link" URL itself should return a string.
     keys: []
+  - url: text-source-link-2
+    # Text for this source will be extracted from JSON retrieved from "text-source-link-1"
+    # from "text-source-key" key.
+    keys: [text-source-key]
+    # Two headers will be added to requests to "text-source-link-2":
+    # {header-name-1: header-value-1, header-name-2: header-value-2}
+    headers:
+      - name: header-name-1
+        value: header-value-1
+      - name: header-name-2
+        value: header-value-2
