@@ -1,3 +1,4 @@
+from functools import reduce
 from dotenv import load_dotenv
 from os import getenv
 from typing import Any
@@ -13,10 +14,7 @@ with open(_SETTINGS_YAML_PATH) as settings_yaml:
 
 
 def _load_config(*keys: tuple[str]) -> Any:
-    value = _SETTINGS_YAML
-    for key in keys:
-        value = value[key]
-    return value
+    return reduce(lambda table, key: table[key], keys, _SETTINGS_YAML)
 
 
 BOT_TOKEN = _load_config("bot", "token")
