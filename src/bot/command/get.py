@@ -5,15 +5,13 @@ Command Cog sending back a random meme.
 from aiohttp import ClientSession
 from logging import getLogger
 from io import BytesIO
-from os import getenv
 from sys import getsizeof
 
 from discord import File
 from discord.ext.commands import Cog, Context, command
 
 from resources import get_random_image_url
-
-MAX_FILESIZE_BYTES = int(getenv("MAX_FILESIZE_BYTES"))
+from settings import BOT_MAX_FILESIZE_BYTES
 
 
 class Get(Cog, name="Get a random meme"):
@@ -24,8 +22,8 @@ class Get(Cog, name="Get a random meme"):
     async def get(self, context: Context) -> None:
         """Get a random meme"""
         media, url = await self._get_media()
-        while getsizeof(media) > MAX_FILESIZE_BYTES:
-            self._logger.info(f"[{url}] [{getsizeof(media)}] exceeds max [{MAX_FILESIZE_BYTES}]")
+        while getsizeof(media) > BOT_MAX_FILESIZE_BYTES:
+            self._logger.info(f"[{url}] [{getsizeof(media)}] exceeds [{BOT_MAX_FILESIZE_BYTES}]")
             media, url = await self._get_media()
         await context.reply(file=File(media, url.split("/")[-1]))
 

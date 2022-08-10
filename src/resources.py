@@ -1,15 +1,13 @@
 from logging import getLogger
-from os import getenv
 from random import choice
 from typing import Any
 
-from dotenv import load_dotenv
 from requests import get
 from yaml import safe_load
 
-load_dotenv()
-_SOURCES_FILE = getenv("SOURCES_FILE")
-with open(_SOURCES_FILE) as sources_file:
+from settings import SOURCES_FILE
+
+with open(SOURCES_FILE) as sources_file:
     _SOURCES = safe_load(sources_file)
 _MEDIA_SOURCES = _SOURCES["media"]
 _TEXT_SOURCES = _SOURCES["text"]
@@ -41,7 +39,6 @@ def _load_resource_json(source: dict[str, Any]) -> dict[str, Any]:
 def _parse_headers(source: dict[str, Any]) -> dict[str, str]:
     headers = source.get("headers", [])
     return {header["name"]: header["value"] for header in headers}
-        
 
 
 def _extract_resource_from_json(json_resource: Any, keys: list[str]) -> str:

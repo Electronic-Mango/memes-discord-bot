@@ -4,19 +4,14 @@ Output language can be configured with dedicated command.
 """
 
 from logging import getLogger
-from os import getenv
 
 from discord.ext.commands import Cog, Context, command
 from discord.utils import escape_markdown
-from dotenv import load_dotenv
 from more_itertools import sliced
 
 from resources import get_pasta
+from settings import BOT_DEEP_FRIED_LANGUAGE, BOT_MAX_TEXT_MESSAGE_LENGTH
 from translator import detect_language, is_valid_language, translate
-
-load_dotenv
-_MAX_TEXT_MESSAGE_LENGTH = int(getenv("MAX_TEXT_MESSAGE_LENGTH"))
-_DEEP_FRIED_LANGUAGE = getenv("DEEP_FRIED_LANGUAGE")
 
 
 class Pasta(Cog, name="Get a random pasta"):
@@ -52,13 +47,13 @@ class Pasta(Cog, name="Get a random pasta"):
         """Get a random deep-fried-pasta"""
         pasta = get_pasta()
         original_language = detect_language(pasta)
-        pasta = translate(pasta, _DEEP_FRIED_LANGUAGE)
+        pasta = translate(pasta, BOT_DEEP_FRIED_LANGUAGE)
         target_language = self._languages.get(context.channel.id, original_language)
         pasta = translate(pasta, target_language)
         await self._send_pasta(context, pasta)
 
     async def _send_pasta(self, context: Context, pasta: str) -> None:
-        sliced_pasta = sliced(escape_markdown(pasta), _MAX_TEXT_MESSAGE_LENGTH)
+        sliced_pasta = sliced(escape_markdown(pasta), BOT_MAX_TEXT_MESSAGE_LENGTH)
         sliced_pasta = [slice.strip() for slice in sliced_pasta]
         for slice in sliced_pasta:
             await context.reply(slice)
