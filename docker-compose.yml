@@ -9,8 +9,6 @@ services:
     build: .
     container_name: memes-discord-bot
     restart: unless-stopped
-    env_file:
-      - ./.env
 networks:
   default:
     name: memes-discord-bot-network
