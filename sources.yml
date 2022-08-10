@@ -3,10 +3,14 @@
 
 media:
   - url: some-media-source-link
-    key: source-key
+    keys:
+      - source-key
   - url: some-other-media-source-link
-    key: other-source-key
+    keys:
+      - other-source-key-1
+      - other-source-key-2
 
 text:
   - url: text-source-link
-    key: text-source-key
+    keys:
+      - text-source-key

@@ -1,6 +1,7 @@
 from logging import getLogger
 from os import getenv
 from random import choice
+from typing import Any
 
 from dotenv import load_dotenv
 from requests import get
@@ -26,8 +27,18 @@ def get_pasta() -> str:
 
 def _get_resource(sources: list[dict[str, str]]) -> str:
     source = choice(sources)
+    response_json = _load_resource_json(source)
+    return _extract_resource_from_json(response_json, source["keys"])
+
+
+def _load_resource_json(source: dict[str, str]) -> dict[str, Any]:
     source_url = source["url"]
     _logger.info(f"Using [{source_url}]")
-    item = get(source_url).json()
-    source_key = source["key"]
-    return item[source_key].strip()
+    return get(source_url).json()
+
+
+def _extract_resource_from_json(json_resource: Any, keys: list[str]) -> str:
+    resource = json_resource
+    for key in keys:
+        resource = resource[key]
+    return resource
