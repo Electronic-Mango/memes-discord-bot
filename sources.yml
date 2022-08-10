@@ -1,4 +1,9 @@
-# YAML file containing all media sources.
+# YAML file containing all media and text sources.
 # Source name is used only for logging purposes.
-source-name-1: some-source-link
-source-name-2: some-other-source-link
+
+media:
+  - some-media-source-link
+  - some-other-media-source-link
+
+text:
+  - text-source-link

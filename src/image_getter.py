@@ -7,20 +7,15 @@ from requests import get
 from yaml import safe_load
 
 load_dotenv()
-_MEDIA_SOURCES_FILE = getenv("MEDIA_SOURCES_FILE")
+_SOURCES_FILE = getenv("SOURCES_FILE")
+with open(_SOURCES_FILE) as sources_file:
+    _MEDIA_SOURCES = safe_load(sources_file)["media"]
 
 _logger = getLogger(__name__)
 
 
 def get_random_image_url() -> str:
-    feed_source = _get_random_source()
-    item = get(feed_source).json()
+    source_url = choice(_MEDIA_SOURCES)
+    _logger.info(f"Using [{source_url}]")
+    item = get(source_url).json()
     return item["url"]
-
-
-def _get_random_source() -> str:
-    with open(_MEDIA_SOURCES_FILE) as sources_file:
-        sources = safe_load(sources_file)
-    source_name, source_url = choice(list(sources.items()))
-    _logger.info(f"Using [{source_name}] [{source_url}]")
-    return source_url
