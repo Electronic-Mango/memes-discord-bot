@@ -11,7 +11,7 @@ from sys import getsizeof
 from discord import File
 from discord.ext.commands import Cog, Context, command
 
-from image_getter import get_random_image_url
+from resources import get_random_image_url
 
 MAX_FILESIZE_BYTES = int(getenv("MAX_FILESIZE_BYTES"))
 

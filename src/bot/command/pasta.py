@@ -11,7 +11,7 @@ from discord.utils import escape_markdown
 from dotenv import load_dotenv
 from more_itertools import sliced
 
-from pasta_getter import get_pasta
+from resources import get_pasta
 from translator import detect_language, is_valid_language, translate
 
 load_dotenv

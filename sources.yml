@@ -2,8 +2,11 @@
 # Source name is used only for logging purposes.
 
 media:
-  - some-media-source-link
-  - some-other-media-source-link
+  - url: some-media-source-link
+    key: source-key
+  - url: some-other-media-source-link
+    key: other-source-key
 
 text:
-  - text-source-link
+  - url: text-source-link
+    key: text-source-key
