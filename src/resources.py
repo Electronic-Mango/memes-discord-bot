@@ -1,3 +1,4 @@
+from functools import reduce
 from logging import getLogger
 from random import choice
 from typing import Any
@@ -42,7 +43,4 @@ def _parse_headers(source: dict[str, Any]) -> dict[str, str]:
 
 
 def _extract_resource_from_json(json_resource: Any, keys: list[str]) -> str:
-    resource = json_resource
-    for key in keys:
-        resource = resource[key]
-    return resource
+    return reduce(lambda json, key: json[key], keys, json_resource)
