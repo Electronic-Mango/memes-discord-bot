@@ -3,14 +3,19 @@
 
 media:
   - url: some-media-source-link
+    # Media URL for this source will be extracted from JSON retrieved from
+    # "some-media-source-link" from key "source-key".
     keys:
       - source-key
   - url: some-other-media-source-link
+    # Media URL for this source will be extracted from JSON retrieved from
+    # "some-other-media-source-link" from nested keys "other-source-key-1" - "other-source-key-2".
     keys:
       - other-source-key-1
       - other-source-key-2
 
 text:
   - url: text-source-link
-    keys:
-      - text-source-key
+    # Text for this source will be extracted from JSON retrieved from "text-source-link" directly.
+    # "text-source-link" should return a string.
+    keys: []
