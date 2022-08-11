@@ -11,7 +11,7 @@ from more_itertools import sliced
 
 from resources import get_random_text
 from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGE, BOT_MAX_TEXT_MESSAGE_LENGTH
-from translator import detect_language, is_valid_language, translate
+from translator import is_valid_language, translate
 
 _TEXT_COMMAND_NAMES = BOT_COMMANDS["text"]
 _SET_LANGUAGE_COMMAND_NAMES = BOT_COMMANDS["set_language"]
@@ -27,7 +27,7 @@ class Text(Cog, name="Get a random text"):
     @command(name=_TEXT_COMMAND_NAMES[0], aliases=_TEXT_COMMAND_NAMES[1:])
     async def text(self, context: Context) -> None:
         """Get a random text message"""
-        text = get_random_text()
+        text, _ = get_random_text()
         if context.channel.id in self._languages:
             text = translate(text, self._languages[context.channel.id])
         await self._send_text(context, text)
@@ -35,11 +35,11 @@ class Text(Cog, name="Get a random text"):
     @command(name=_SET_LANGUAGE_COMMAND_NAMES[0], aliases=_SET_LANGUAGE_COMMAND_NAMES[1:])
     async def set_language(self, context: Context, *, target_language: str) -> None:
         """Set language for text-based commands output"""
-        if not is_valid_language(target_language):
-            await context.reply(f"{target_language} is not valid")
-        else:
+        if is_valid_language(target_language):
             self._languages[context.channel.id] = target_language
             await context.reply(f"Set language to **{target_language}**")
+        else:
+            await context.reply("Invalid language code!")
 
     @command(name=_RESET_LANGUAGE_COMMAND_NAMES[0], aliases=_RESET_LANGUAGE_COMMAND_NAMES[1:])
     async def reset_language(self, context: Context) -> None:
@@ -50,8 +50,7 @@ class Text(Cog, name="Get a random text"):
     @command(name=_DEEP_FRIED_TEXT_COMMAND_NAMES[0], aliases=_DEEP_FRIED_TEXT_COMMAND_NAMES[1:])
     async def deep_fried_text(self, context: Context) -> None:
         """Get a random deep-fried text"""
-        text = get_random_text()
-        original_language = detect_language(text)
+        text, original_language = get_random_text()
         text = translate(text, BOT_DEEP_FRIED_LANGUAGE)
         target_language = self._languages.get(context.channel.id, original_language)
         text = translate(text, target_language)

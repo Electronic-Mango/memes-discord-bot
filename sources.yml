@@ -19,6 +19,9 @@ text:
     # Text for this source will be extracted from JSON retrieved from "text-source-link-1" directly.
     # "text-source-link" URL itself should return a string.
     keys: []
+    # Optional parameter holding code of language of sourced texts.
+    # Defaults to english.
+    language: en
   - url: text-source-link-2
     # Text for this source will be extracted from JSON retrieved from "text-source-link-1"
     # from "text-source-key" key.

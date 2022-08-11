@@ -12,22 +12,24 @@ with open(SOURCES_FILE) as sources_file:
     _SOURCES = safe_load(sources_file)
 _MEDIA_SOURCES = _SOURCES["media"]
 _TEXT_SOURCES = _SOURCES["text"]
+_DEFAULT_LANGUAGE = "en"
 
 _logger = getLogger(__name__)
 
 
 def get_random_media_url() -> str:
-    return _get_resource(_MEDIA_SOURCES)
+    source = choice(_MEDIA_SOURCES)
+    return _get_resource(source)
 
 
-def get_random_text() -> str:
-    return _get_resource(_TEXT_SOURCES)
+def get_random_text() -> tuple[str, str]:
+    source = choice(_TEXT_SOURCES)
+    return _get_resource(source), source.get("language", _DEFAULT_LANGUAGE)
 
 
-def _get_resource(sources: list[dict[str, Any]]) -> str:
-    source = choice(sources)
+def _get_resource(source: dict[str, Any]) -> str:
     response_json = _load_resource_json(source)
-    return _extract_resource_from_json(response_json, source["keys"])
+    return _extract_resource_from_json(response_json, source.get("keys", []))
 
 
 def _load_resource_json(source: dict[str, Any]) -> dict[str, Any]:
