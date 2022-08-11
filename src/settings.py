@@ -17,7 +17,10 @@ def _load_settings(settings_path: str) -> dict[str, Any]:
         return safe_load(settings_yaml)
 
 
-_SETTINGS = merge(_load_settings(_DEFAULT_SETTINGS_PATH), _load_settings(_CUSTOM_SETTINGS_PATH))
+_SETTINGS = merge(
+    _load_settings(_DEFAULT_SETTINGS_PATH),
+    _load_settings(_CUSTOM_SETTINGS_PATH) if _CUSTOM_SETTINGS_PATH else {},
+)
 
 
 def _load_config(*keys: tuple[str]) -> Any:
