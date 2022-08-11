@@ -4,12 +4,12 @@
 
 version: "3.9"
 services:
-  memes-discord-bot:
-    image: memes-discord-bot:latest
+  random-media-discord-bot:
+    image: random-media-discord-bot:latest
     build: .
-    container_name: memes-discord-bot
+    container_name: random-media-discord-bot
     restart: unless-stopped
 networks:
   default:
-    name: memes-discord-bot-network
+    name: random-media-discord-bot-network
     driver: bridge
