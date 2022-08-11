@@ -20,8 +20,8 @@ bot:
   # When overwritting in custom "settings.yml" you have to overwrite all names,
   # all names will be replaced.
   commands:
-    get:
-      - get
+    media:
+      - media
     pasta:
       - pasta
     set_language:

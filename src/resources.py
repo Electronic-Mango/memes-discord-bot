@@ -16,7 +16,7 @@ _TEXT_SOURCES = _SOURCES["text"]
 _logger = getLogger(__name__)
 
 
-def get_random_image_url() -> str:
+def get_random_media_url() -> str:
     return _get_resource(_MEDIA_SOURCES)
 
 
