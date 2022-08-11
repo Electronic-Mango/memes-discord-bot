@@ -3,18 +3,25 @@ from dotenv import load_dotenv
 from os import getenv
 from typing import Any
 
+from mergedeep import merge
 from yaml import safe_load
 
 load_dotenv()
+_DEFAULT_SETTINGS_PATH = "settings.yml"
+_CUSTOM_SETTINGS_PATH_VARIABLE_NAME = "CUSTOM_SETTINGS_PATH"
+_CUSTOM_SETTINGS_PATH = getenv(_CUSTOM_SETTINGS_PATH_VARIABLE_NAME)
 
-_DEFAULT_SETTINGS_YAML_PATH = "settings.yml"
-_SETTINGS_YAML_PATH = getenv("SETTINGS_YAML_PATH", _DEFAULT_SETTINGS_YAML_PATH)
-with open(_SETTINGS_YAML_PATH) as settings_yaml:
-    _SETTINGS_YAML = safe_load(settings_yaml)
+
+def _load_settings(settings_path: str) -> dict[str, Any]:
+    with open(settings_path) as settings_yaml:
+        return safe_load(settings_yaml)
+
+
+_SETTINGS = merge(_load_settings(_DEFAULT_SETTINGS_PATH), _load_settings(_CUSTOM_SETTINGS_PATH))
 
 
 def _load_config(*keys: tuple[str]) -> Any:
-    return reduce(lambda table, key: table[key], keys, _SETTINGS_YAML)
+    return reduce(lambda table, key: table[key], keys, _SETTINGS)
 
 
 BOT_TOKEN = _load_config("bot", "token")

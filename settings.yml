@@ -3,7 +3,7 @@
 
 bot:
   # Your Discord bot token
-  token: 
+  token:
   # Command prefix for your bot
   command_prefix: "!"
   # Max possible filesize, by default on Discord it's 8MB
