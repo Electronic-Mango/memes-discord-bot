@@ -2,18 +2,18 @@
 # It can be loaded in python, or used for environment variables.
 
 bot:
-  # Your Discord bot token
+  # Your Discord bot token.
   token:
-  # Command prefix for your bot
+  # Command prefix for your bot.
   command_prefix: "!"
-  # Max possible filesize, by default on Discord it's 8MB
+  # Max possible filesize, by default on Discord it's 8MB.
   max_filesize_bytes: 8000000
-  # Max character length for "pasta" command output, longer messages will be split
-  # By default Discord allows 2000 characters
+  # Max character length for text messages, longer messages will be split into multiple messages.
+  # By default Discord allows 2000 characters.
   max_text_message_length: 2000
-  # Intermediate language used to "deep-fry" messages
+  # Intermediate language used to "deep-fry" messages.
   # Messages are being first translated to this language,
-  # then either to original or configured by users
+  # then either to original or configured by users.
   deep_fried_language: kk
   # Names and aliases for every command.
   # First element on the list is the main name, subsequent ones are optional aliases.
@@ -22,8 +22,8 @@ bot:
   commands:
     media:
       - media
-    pasta:
-      - pasta
+    text:
+      - text
     set_language:
       - setlanguage
       - lang
@@ -31,10 +31,10 @@ bot:
     reset_language:
       - resetlanguage
       - resetlang
-    deep_fried_pasta:
-      - deepfriedpasta
-      - dfpasta
-      - dfp
+    deep_fried_text:
+      - deepfriedtext
+      - dftext
+      - dft
 sources:
-  # YAML file containing all sources for commands
+  # YAML file containing all sources for commands.
   file: sources.yml

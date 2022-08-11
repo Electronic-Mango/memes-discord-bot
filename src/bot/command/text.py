@@ -1,5 +1,5 @@
 """
-Command Cog sending back a random pasta.
+Command Cog sending back a random text.
 Output language can be configured with dedicated command.
 """
 
@@ -9,32 +9,32 @@ from discord.ext.commands import Cog, Context, command
 from discord.utils import escape_markdown
 from more_itertools import sliced
 
-from resources import get_pasta
+from resources import get_random_text
 from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGE, BOT_MAX_TEXT_MESSAGE_LENGTH
 from translator import detect_language, is_valid_language, translate
 
-_PASTA_COMMAND_NAMES = BOT_COMMANDS["pasta"]
+_TEXT_COMMAND_NAMES = BOT_COMMANDS["text"]
 _SET_LANGUAGE_COMMAND_NAMES = BOT_COMMANDS["set_language"]
 _RESET_LANGUAGE_COMMAND_NAMES = BOT_COMMANDS["reset_language"]
-_DEEP_FRIED_PASTA_COMMAND_NAMES = BOT_COMMANDS["deep_fried_pasta"]
+_DEEP_FRIED_TEXT_COMMAND_NAMES = BOT_COMMANDS["deep_fried_text"]
 
 
-class Pasta(Cog, name="Get a random pasta"):
+class Text(Cog, name="Get a random text"):
     def __init__(self) -> None:
         self._logger = getLogger(__name__)
         self._languages = dict()
 
-    @command(name=_PASTA_COMMAND_NAMES[0], aliases=_PASTA_COMMAND_NAMES[1:])
-    async def pasta(self, context: Context) -> None:
-        """Get a random pasta"""
-        pasta = get_pasta()
+    @command(name=_TEXT_COMMAND_NAMES[0], aliases=_TEXT_COMMAND_NAMES[1:])
+    async def text(self, context: Context) -> None:
+        """Get a random text message"""
+        text = get_random_text()
         if context.channel.id in self._languages:
-            pasta = translate(pasta, self._languages[context.channel.id])
-        await self._send_pasta(context, pasta)
+            text = translate(text, self._languages[context.channel.id])
+        await self._send_text(context, text)
 
     @command(name=_SET_LANGUAGE_COMMAND_NAMES[0], aliases=_SET_LANGUAGE_COMMAND_NAMES[1:])
     async def set_language(self, context: Context, *, target_language: str) -> None:
-        """Set language for "pasta" command output"""
+        """Set language for text-based commands output"""
         if not is_valid_language(target_language):
             await context.reply(f"{target_language} is not valid")
         else:
@@ -43,22 +43,22 @@ class Pasta(Cog, name="Get a random pasta"):
 
     @command(name=_RESET_LANGUAGE_COMMAND_NAMES[0], aliases=_RESET_LANGUAGE_COMMAND_NAMES[1:])
     async def reset_language(self, context: Context) -> None:
-        """Reset language for "pasta" command output"""
+        """Reset language for text-based commands output"""
         self._languages.pop(context.channel.id, None)
         await context.reply("Set language to default")
 
-    @command(name=_DEEP_FRIED_PASTA_COMMAND_NAMES[0], aliases=_DEEP_FRIED_PASTA_COMMAND_NAMES[1:])
-    async def deep_fried_pasta(self, context: Context) -> None:
-        """Get a random deep-fried-pasta"""
-        pasta = get_pasta()
-        original_language = detect_language(pasta)
-        pasta = translate(pasta, BOT_DEEP_FRIED_LANGUAGE)
+    @command(name=_DEEP_FRIED_TEXT_COMMAND_NAMES[0], aliases=_DEEP_FRIED_TEXT_COMMAND_NAMES[1:])
+    async def deep_fried_text(self, context: Context) -> None:
+        """Get a random deep-fried text"""
+        text = get_random_text()
+        original_language = detect_language(text)
+        text = translate(text, BOT_DEEP_FRIED_LANGUAGE)
         target_language = self._languages.get(context.channel.id, original_language)
-        pasta = translate(pasta, target_language)
-        await self._send_pasta(context, pasta)
+        text = translate(text, target_language)
+        await self._send_text(context, text)
 
-    async def _send_pasta(self, context: Context, pasta: str) -> None:
-        sliced_pasta = sliced(escape_markdown(pasta), BOT_MAX_TEXT_MESSAGE_LENGTH)
-        sliced_pasta = [slice.strip() for slice in sliced_pasta]
-        for slice in sliced_pasta:
+    async def _send_text(self, context: Context, text: str) -> None:
+        sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
+        sliced_text = [slice.strip() for slice in sliced_text]
+        for slice in sliced_text:
             await context.reply(slice)

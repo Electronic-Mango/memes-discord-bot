@@ -5,7 +5,7 @@ Module creating the bot, adding all required Cogs and running it.
 from discord.ext.commands import Bot, when_mentioned_or
 
 from bot.command.media import Media
-from bot.command.pasta import Pasta
+from bot.command.text import Text
 from bot.event.on_command import OnCommand
 from bot.event.on_connect import OnConnect
 from bot.event.on_ready import OnReady
@@ -18,5 +18,5 @@ def run_bot() -> None:
     bot.add_cog(OnReady(bot))
     bot.add_cog(OnCommand())
     bot.add_cog(Media())
-    bot.add_cog(Pasta())
+    bot.add_cog(Text())
     bot.run(BOT_TOKEN)

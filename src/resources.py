@@ -20,7 +20,7 @@ def get_random_media_url() -> str:
     return _get_resource(_MEDIA_SOURCES)
 
 
-def get_pasta() -> str:
+def get_random_text() -> str:
     return _get_resource(_TEXT_SOURCES)
 
 
