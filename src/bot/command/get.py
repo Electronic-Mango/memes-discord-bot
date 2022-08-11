@@ -11,14 +11,16 @@ from discord import File
 from discord.ext.commands import Cog, Context, command
 
 from resources import get_random_image_url
-from settings import BOT_MAX_FILESIZE_BYTES
+from settings import BOT_COMMANDS, BOT_MAX_FILESIZE_BYTES
+
+_GET_COMMAND_NAMES = BOT_COMMANDS["get"]
 
 
 class Get(Cog, name="Get a random meme"):
     def __init__(self) -> None:
         self._logger = getLogger(__name__)
 
-    @command(name="get")
+    @command(name=_GET_COMMAND_NAMES[0], aliases=_GET_COMMAND_NAMES[1:])
     async def get(self, context: Context) -> None:
         """Get a random meme"""
         media, url = await self._get_media()

@@ -15,6 +15,26 @@ bot:
   # Messages are being first translated to this language,
   # then either to original or configured by users
   deep_fried_language: kk
+  # Names and aliases for every command.
+  # First element on the list is the main name, subsequent ones are optional aliases.
+  # When overwritting in custom "settings.yml" you have to overwrite all names,
+  # all names will be replaced.
+  commands:
+    get:
+      - get
+    pasta:
+      - pasta
+    set_language:
+      - setlanguage
+      - lang
+      - language
+    reset_language:
+      - resetlanguage
+      - resetlang
+    deep_fried_pasta:
+      - deepfriedpasta
+      - dfpasta
+      - dfp
 sources:
   # YAML file containing all sources for commands
   file: sources.yml

@@ -10,8 +10,13 @@ from discord.utils import escape_markdown
 from more_itertools import sliced
 
 from resources import get_pasta
-from settings import BOT_DEEP_FRIED_LANGUAGE, BOT_MAX_TEXT_MESSAGE_LENGTH
+from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGE, BOT_MAX_TEXT_MESSAGE_LENGTH
 from translator import detect_language, is_valid_language, translate
+
+_PASTA_COMMAND_NAMES = BOT_COMMANDS["pasta"]
+_SET_LANGUAGE_COMMAND_NAMES = BOT_COMMANDS["set_language"]
+_RESET_LANGUAGE_COMMAND_NAMES = BOT_COMMANDS["reset_language"]
+_DEEP_FRIED_PASTA_COMMAND_NAMES = BOT_COMMANDS["deep_fried_pasta"]
 
 
 class Pasta(Cog, name="Get a random pasta"):
@@ -19,7 +24,7 @@ class Pasta(Cog, name="Get a random pasta"):
         self._logger = getLogger(__name__)
         self._languages = dict()
 
-    @command(name="pasta")
+    @command(name=_PASTA_COMMAND_NAMES[0], aliases=_PASTA_COMMAND_NAMES[1:])
     async def pasta(self, context: Context) -> None:
         """Get a random pasta"""
         pasta = get_pasta()
@@ -27,7 +32,7 @@ class Pasta(Cog, name="Get a random pasta"):
             pasta = translate(pasta, self._languages[context.channel.id])
         await self._send_pasta(context, pasta)
 
-    @command(name="setlanguage", aliases=["lang", "language"])
+    @command(name=_SET_LANGUAGE_COMMAND_NAMES[0], aliases=_SET_LANGUAGE_COMMAND_NAMES[1:])
     async def set_language(self, context: Context, *, target_language: str) -> None:
         """Set language for "pasta" command output"""
         if not is_valid_language(target_language):
@@ -36,13 +41,13 @@ class Pasta(Cog, name="Get a random pasta"):
             self._languages[context.channel.id] = target_language
             await context.reply(f"Set language to **{target_language}**")
 
-    @command(name="resetlanguage", aliases=["resetlang"])
+    @command(name=_RESET_LANGUAGE_COMMAND_NAMES[0], aliases=_RESET_LANGUAGE_COMMAND_NAMES[1:])
     async def reset_language(self, context: Context) -> None:
         """Reset language for "pasta" command output"""
         self._languages.pop(context.channel.id, None)
         await context.reply("Set language to default")
 
-    @command(name="deepfriedpasta", aliases=["dfpasta", "dfp"])
+    @command(name=_DEEP_FRIED_PASTA_COMMAND_NAMES[0], aliases=_DEEP_FRIED_PASTA_COMMAND_NAMES[1:])
     async def deep_fried_pasta(self, context: Context) -> None:
         """Get a random deep-fried-pasta"""
         pasta = get_pasta()
