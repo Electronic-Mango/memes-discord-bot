@@ -253,3 +253,13 @@ Keep this in mind when selecting sources, since downloading large files can slow
 Max length of text message is defined in `settings.yml` under `max_text_message_length`, by default it's 2000 characters.
 Longer messages will be split into multiple messages, each up to `max_text_message_length` characters long.
 Bot doesn't try and do this in any smart way, it just splits after `max_text_message_length` characters, so words can be split in half.
+
+
+
+## Why? What it's for?
+
+Memes!
+At least that's what I use this bot for.
+You can supply media sources for some memes and text sources for copypastas from the internet and get yourselft a nice memes Discord bot.
+
+Or you can use it to send inspirational quotes and images if it suites you more. Overall usage can be pretty generic.
