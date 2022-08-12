@@ -63,3 +63,14 @@ Sources for media and texts are in `sources.yml` file, or whichever file is conf
 
 Setting text messages language doesn't change a source, it just translates the text received from a source.
 Translation is done through [`deep_translator`](https://github.com/nidhaloff/deep-translator) and Google Translate.
+
+
+### Deep-fried text messages
+
+What does it mean?
+Before a text from a source is send back, it's translated through multiple languages, then to either original language or target language configured via `setlanguage` command.
+
+Translating between multiple different languages causes texts to be weirdly distorted and strange, which is the point of this command.
+
+Intermediate languages can be configured via `settings.yml`.
+It can be however many languages as you'd like, just keep in mind, that each translation does take some time.
