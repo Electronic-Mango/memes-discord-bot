@@ -58,6 +58,5 @@ class Text(Cog, name="Get a random text"):
 
     async def _send_text(self, context: Context, text: str) -> None:
         sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
-        sliced_text = [slice.strip() for slice in sliced_text]
         for slice in sliced_text:
-            await context.reply(slice)
+            await context.reply(slice.strip())
