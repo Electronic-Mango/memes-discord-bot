@@ -22,7 +22,7 @@ class Media(Cog, name="Send back a random media (image, GIFs, videos, etc.)"):
 
     @command(name=_MEDIA_COMMAND_NAMES[0], aliases=_MEDIA_COMMAND_NAMES[1:])
     async def media(self, context: Context) -> None:
-        """Send back a random media"""
+        """Get a random media"""
         media, url = await self._get_media()
         while getsizeof(media) > BOT_MAX_FILESIZE_BYTES:
             self._logger.info(f"[{url}] [{getsizeof(media)}] exceeds [{BOT_MAX_FILESIZE_BYTES}]")
