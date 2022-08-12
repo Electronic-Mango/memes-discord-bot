@@ -12,5 +12,5 @@ def translate(source: str, target_language: str) -> str:
 
 def is_valid_language(language: str) -> bool:
     _logger.info(f"Checking validity [{language}]")
-    supported_languages = GoogleTranslator().get_supported_languages()
+    supported_languages = GoogleTranslator().get_supported_languages(as_dict=True)
     return language in supported_languages or language in supported_languages.values()
