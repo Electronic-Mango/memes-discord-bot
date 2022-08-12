@@ -4,7 +4,6 @@ Output language can be configured with dedicated command.
 """
 
 from functools import reduce
-from logging import getLogger
 
 from discord.ext.commands import Cog, Context, command
 from discord.utils import escape_markdown
@@ -22,7 +21,6 @@ _DEEP_FRIED_TEXT_COMMAND_NAMES = BOT_COMMANDS["deep_fried_text"]
 
 class Text(Cog, name="Get a random text"):
     def __init__(self) -> None:
-        self._logger = getLogger(__name__)
         self._languages = dict()
 
     @command(name=_TEXT_COMMAND_NAMES[0], aliases=_TEXT_COMMAND_NAMES[1:])
