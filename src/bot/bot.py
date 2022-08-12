@@ -13,6 +13,7 @@ from settings import BOT_COMMAND_PREFIX, BOT_TOKEN
 
 
 def run_bot() -> None:
+    """Create, configure and run the bot"""
     bot = Bot(command_prefix=when_mentioned_or(BOT_COMMAND_PREFIX))
     bot.add_cog(OnConnect(bot))
     bot.add_cog(OnReady(bot))

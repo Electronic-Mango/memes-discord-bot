@@ -1,5 +1,5 @@
 """
-Event Cog logging all command calls to internal logger.
+Event Cog logging all command calls.
 """
 
 from logging import getLogger

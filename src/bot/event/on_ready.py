@@ -1,5 +1,5 @@
 """
-Event Cog logging information that bot is ready to internal logger.
+Event Cog logging information that bot is ready.
 """
 
 from logging import getLogger

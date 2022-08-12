@@ -1,5 +1,5 @@
 """
-Event Cog logging information about connection establishment to internal logger.
+Event Cog logging information about connection establishment.
 """
 
 from logging import getLogger

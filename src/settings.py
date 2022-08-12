@@ -1,3 +1,10 @@
+"""
+Module holding all configuration parameters for the project based on "settings.yml" file.
+Additional parameters, overwritting the default ones can be loaded from a file defined in
+"CUSTOM_SETTINGS_PATH" environment variable.
+This overwritting file doesn't have to contain everything, only values to overwrite.
+"""
+
 from functools import reduce
 from dotenv import load_dotenv
 from os import getenv
