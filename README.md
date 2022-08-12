@@ -74,3 +74,112 @@ Translating between multiple different languages causes texts to be weirdly dist
 
 Intermediate languages can be configured via `settings.yml`.
 It can be however many languages as you'd like, just keep in mind, that each translation does take some time.
+
+
+
+## Data sources
+
+Both media and texts are retrieved from external services, like REST APIs.
+URLs to those APIs are defined in `sources.yml`, or whichever file is pointed to in `settings.yml`.
+
+`sources.yml` has two main sections - `media` containing sources for media and `text` containing sources with texts.
+
+**Sources for media should respond with URL to the media, not the media itself.**
+**Sources for texts should just respond with the text itself.**
+
+Both those section contain lists with different source items.
+When appropriate command is executed a random source is selected to get data from.
+
+**Bot assumes that each source will respond with a JSON, or will respond with needed data directly.**
+
+Source items for both sections are pretty much the same:
+|Key name|Type|Value|
+|-|-|-|
+|`url`|string|URL to get data from|
+|`keys`|list|keys where relevant data is located in received JSON|
+|`headers`|list|list of headers to add to request for this source|
+|`language`|string|relevant only for text sources, contains language of texts from this source|
+
+
+### `url`
+
+It's just a URL for the source, most likely some kind of API URL.
+
+
+### `keys`
+
+List of keys where actual media/text resource is located within the JSON response.
+Keys are sorted from the least to most nested within the JSON.
+
+For example, for this JSON response:
+
+```json
+{
+    "ID": "123",
+    "date": 2000-01-01,
+    "source": {
+        "source-id": 1,
+        "author": "author",
+        "value": {
+            "some other field": "some other value",
+            "data": "the actual value which should be extracted"
+        }
+    }
+}
+```
+
+In order to get to `the actual value which should be extracted` value within the JSON response you should define following keys:
+
+```yaml
+keys:
+  - "source"
+  - "value"
+  - "data"
+```
+
+If a source returns needed value directly, not through a JSON you can define an empty list for `keys`:
+```yaml
+keys: []
+```
+
+
+### `headers`
+
+List of HTTP headers to attach to GET request for this source.
+
+Each header list entry has to contain two fields:
+ * `name` name of the header
+ * `value` value for this header
+
+For example, these `headers` in `sources.yml`:
+
+```yaml
+headers:
+  - name: Authentication-Header
+    value: secret-authentication-value
+  - name: Authorization-Header
+    value: secret-authorization-value
+```
+Will cause these headers to be attached to GET request:
+
+```json
+{
+    "Auth-Header": "secret-auth-value",
+    "Authorization-Header": "secret-authorization-value"
+}
+```
+
+### `language`
+
+Applicable only for text sources, defines language of texts from this source.
+Is used when deep-frying texts as a target language, if no target language is configured.
+
+For example, this will mark source as english:
+```yaml
+language: en
+```
+
+
+### More examples
+
+You can check example `sources.yml` file in the project root for more examples of source items.
