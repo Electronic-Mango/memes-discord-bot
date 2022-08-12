@@ -15,6 +15,62 @@ Full list of requirements is in `requirements.txt` file.
 
 
 
+## Configuration
+
+Necessary bot parameters are stored in a YAML file called `settings.yml` in project root.
+This file is initially filled with some sensible defaults, **except Discord bot token which needs to be filled in**.
+
+You can check it out for description of each parameter.
+
+
+### Overwriting default values
+
+Instead of modifying `settings.yml` file directly, you can supply a second file and overwrite only specific parameters there.
+If a necessary value isn't found in this custom file it will be taken from `settings.yml`.
+
+Bot will load this custom file from path defined by `CUSTOM_SETTINGS_PATH` environment variable.
+
+If you would like to use all default values except Discord bot token and bot prefix you can supply custom file such as:
+
+```yaml
+bot:
+  token: your-secret-bot-token
+  command_prefix: mybotprefix!
+```
+
+Keep in mind, that when overwriting list entries entire list will be replaced, they won't be merged.
+For example, when overwriting command name and aliases you have to provide full list:
+
+```yaml
+bot:
+  commands:
+    media:
+      - custom-media-command-name
+      - custom-media-command-alias-1
+      - custom-media-command-alias-2
+      - custom-media-command-alias-3
+```
+
+
+### Docker
+
+There's a `Dockerfile` in the repo, which will build a Docker image for the bot using `python:3.10-slim` as base.
+
+You can also use `docker-compose.yml` to build and start the container via:
+```bash
+docker compose up -d --build
+```
+
+`Dockerfile` will copy all YAML files from the project root into the image.
+Specifically it will copy all files with `.yml` extension.
+
+`docker-compose.yml` defines `CUSTOM_SETTINGS_PATH` environment variable as `custom_settings.yml`, so you can create and fill `custom_settings.yml` with values overwritting ones from default `settings.yml` without modifying project files.
+
+This will require rebuilding the image every time you make a change, even to the custom one.
+To get around this, you can define a mounted volume in `docker-compose.yml` with your custom settings YAML and modify value of `CUSTOM_SETTINGS_PATH` accordingly.
+
+
+
 ## Running the bot
 
 You can run the bot from source, or in a Docker container.
