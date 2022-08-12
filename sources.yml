@@ -1,5 +1,4 @@
 # YAML file containing all media and text sources.
-# Source name is used only for logging purposes.
 
 media:
   - url: some-media-source-link
