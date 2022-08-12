@@ -183,3 +183,17 @@ language: en
 ### More examples
 
 You can check example `sources.yml` file in the project root for more examples of source items.
+
+
+
+## Media and text size limits
+
+Discord limits how large files can be send in a message.
+
+Max file to send is defined in `settings.yml` under `max_filesize_bytes`, by default it's 8MB.
+If file downloaded from a source is too large a new one is selected and downloaded, until one under 8MB is found.
+Keep this in mind when selecting sources, since downloading large files can slow down the bot.
+
+Max length of text message is defined in `settings.yml` under `max_text_message_length`, by default it's 2000 characters.
+Longer messages will be split into multiple messages, each up to `max_text_message_length` characters long.
+Bot doesn't try and do this in any smart way, it just splits after `max_text_message_length` characters, so words can be split in half.
