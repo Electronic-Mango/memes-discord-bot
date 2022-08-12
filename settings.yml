@@ -11,10 +11,13 @@ bot:
   # Max character length for text messages, longer messages will be split into multiple messages.
   # By default Discord allows 2000 characters.
   max_text_message_length: 2000
-  # Intermediate language used to "deep-fry" messages.
-  # Messages are being first translated to this language,
+  # Intermediate languages used to "deep-fry" messages.
+  # Messages are being translated to those languages in sequence,
   # then either to original or configured by users.
-  deep_fried_language: kk
+  # When overwritting you must provide full list of languages, the full list will be replaced.
+  deep_fried_languages:
+    - km
+    - gu
   # Names and aliases for every command.
   # First element on the list is the main name, subsequent ones are optional aliases.
   # When overwritting in custom "settings.yml" you have to overwrite all names,

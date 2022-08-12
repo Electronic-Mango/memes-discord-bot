@@ -31,7 +31,7 @@ BOT_TOKEN = _load_config("bot", "token")
 BOT_COMMAND_PREFIX = _load_config("bot", "command_prefix")
 BOT_MAX_FILESIZE_BYTES = _load_config("bot", "max_filesize_bytes")
 BOT_MAX_TEXT_MESSAGE_LENGTH = _load_config("bot", "max_text_message_length")
-BOT_DEEP_FRIED_LANGUAGE = _load_config("bot", "deep_fried_language")
+BOT_DEEP_FRIED_LANGUAGES = _load_config("bot", "deep_fried_languages")
 BOT_COMMANDS = _load_config("bot", "commands")
 
 SOURCES_FILE = _load_config("sources", "file")

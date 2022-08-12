@@ -3,6 +3,7 @@ Command Cog sending back a random text.
 Output language can be configured with dedicated command.
 """
 
+from functools import reduce
 from logging import getLogger
 
 from discord.ext.commands import Cog, Context, command
@@ -10,7 +11,7 @@ from discord.utils import escape_markdown
 from more_itertools import sliced
 
 from resources import get_random_text
-from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGE, BOT_MAX_TEXT_MESSAGE_LENGTH
+from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGES, BOT_MAX_TEXT_MESSAGE_LENGTH
 from translator import is_valid_language, translate
 
 _TEXT_COMMAND_NAMES = BOT_COMMANDS["text"]
@@ -51,10 +52,9 @@ class Text(Cog, name="Get a random text"):
     async def deep_fried_text(self, context: Context) -> None:
         """Get a random deep-fried text"""
         text, original_language = get_random_text()
-        text = translate(text, BOT_DEEP_FRIED_LANGUAGE)
         target_language = self._languages.get(context.channel.id, original_language)
-        text = translate(text, target_language)
-        await self._send_text(context, text)
+        deep_fried_text = reduce(translate, BOT_DEEP_FRIED_LANGUAGES + [target_language], text)
+        await self._send_text(context, deep_fried_text)
 
     async def _send_text(self, context: Context, text: str) -> None:
         sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
