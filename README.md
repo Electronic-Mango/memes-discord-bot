@@ -52,7 +52,7 @@ You can check it out for description of each parameter.
 Instead of modifying `settings.yml` file directly, you can supply a second file and overwrite only specific parameters there.
 If a necessary value isn't found in this custom file it will be taken from `settings.yml`.
 
-Bot will load this custom file from path defined by `CUSTOM_SETTINGS_PATH` environment variable.
+Bot will load this custom file from path defined by `CUSTOM_SETTINGS_PATH` environment variable. It can also be defined in a `.env`.
 
 If you would like to use all default values except Discord bot token and bot prefix you can supply custom file such as:
 
