@@ -9,6 +9,8 @@ services:
     build: .
     container_name: random-media-discord-bot
     restart: unless-stopped
+    environment:
+      - CUSTOM_SETTINGS_PATH=custom_settings.yml
 networks:
   default:
     name: random-media-discord-bot-network
