@@ -8,6 +8,30 @@ A simple Discord bot sending memes and copypastas via Discord, build with [`disc
 
 
 
+## Table of contents
+
+- [Table of contents](#table-of-contents)
+- [Requirements](#requirements)
+- [Configuration](#configuration)
+  - [Overwriting default values](#overwriting-default-values)
+  - [Docker configuration](#docker-configuration)
+- [Running the bot](#running-the-bot)
+  - [From source](#from-source)
+  - [Docker](#docker)
+- [Commands](#commands)
+  - [Text message language](#text-message-language)
+  - [Deep-fried text messages](#deep-fried-text-messages)
+- [Data sources](#data-sources)
+  - [`url`](#url)
+  - [`keys`](#keys)
+  - [`headers`](#headers)
+  - [`language`](#language)
+  - [More examples](#more-examples)
+- [Media and text size limits](#media-and-text-size-limits)
+- [Why? What it's for?](#why-what-its-for)
+
+
+
 ## Requirements
 
 This bot was built using `Python 3.10`.
@@ -52,7 +76,7 @@ bot:
 ```
 
 
-### Docker
+### Docker configuration
 
 There's a `Dockerfile` in the repo, which will build a Docker image for the bot using `python:3.10-slim` as base.
 
