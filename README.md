@@ -41,3 +41,19 @@ You can skip the `--build` flag if you didn't modify the source code (or `custom
 By default all YAML files from the project root are added to the Docker image.
 If you don't want to rebuild the image every time you modify `settings.yml` or `custom_settings.yml` you can load custom one from a mounted volume.
 This will require modification to `docker-compose.yml`.
+
+
+
+## Commands
+
+(Almost) all command names and their aliases can be configured through `settings.yml`, or through a custom settings YAML.
+There are present default values in `settings.yml` which can be used as-is.
+
+ * `help` - prints help message, its name cannot be modified through `settings.yml`
+ * `media` - sends back a media item (image, GIF, video, etc)
+ * `text` - sends back a text message
+ * `setlanguage` - sets language of text messages
+ * `resetlanguage` - resets language of text messages to default
+ * `deepfriedtext` - sends back a "deep-fried" text message
+
+Sources for media and texts are in `sources.yml` file, or whichever file is configured in `settings.yml`.
