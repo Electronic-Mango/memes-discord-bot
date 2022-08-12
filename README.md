@@ -196,7 +196,7 @@ For example, for this JSON response:
 ```json
 {
     "ID": "123",
-    "date": 2000-01-01,
+    "date": "2000-01-01",
     "source": {
         "source-id": 1,
         "author": "author",
