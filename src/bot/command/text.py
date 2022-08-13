@@ -16,7 +16,7 @@ from translator import is_valid_language, SUPPORTED_LANGUAGES, translate
 
 _COMMAND = BOT_COMMANDS["text"]
 _COMMAND_GROUP_NAME = _COMMAND["group"]["group_name"]
-_COMMAND_DESCRIPTION = _COMMAND["group"]["description"]
+_COMMAND_DESCRIPTION = _COMMAND["group"].get("description")
 _GET_COMMAND = _COMMAND["commands"]["get"]
 _SET_LANGUAGE = _COMMAND["commands"]["set_language"]
 _RESET_LANGUAGE = _COMMAND["commands"]["reset_language"]
@@ -28,7 +28,7 @@ text_command_group = SlashCommandGroup(_COMMAND_GROUP_NAME, _COMMAND_DESCRIPTION
 _command = text_command_group.command
 
 
-@_command(name=_GET_COMMAND["name"], description=_GET_COMMAND["description"])
+@_command(name=_GET_COMMAND.get("name"), description=_GET_COMMAND.get("description"))
 async def text(context: ApplicationContext) -> None:
     """Get a random text message"""
     await context.defer()
@@ -44,7 +44,7 @@ async def _get_languages(context: ApplicationContext) -> list[str]:
 
 
 # TODO Perhaps "language" parameter could also be taken from "settings.yml"?
-@_command(name=_SET_LANGUAGE["name"], description=_SET_LANGUAGE["description"])
+@_command(name=_SET_LANGUAGE.get("name"), description=_SET_LANGUAGE.get("description"))
 @option("language", description=_SET_LANGUAGE["autocomplete_hint"], autocomplete=_get_languages)
 async def set_language(context: ApplicationContext, *, language: str) -> None:
     """Set language for text-based commands output"""
@@ -55,14 +55,14 @@ async def set_language(context: ApplicationContext, *, language: str) -> None:
         await context.respond(f"**{language}** isn't a valid language")
 
 
-@_command(name=_RESET_LANGUAGE["name"], description=_RESET_LANGUAGE["description"])
+@_command(name=_RESET_LANGUAGE.get("name"), description=_RESET_LANGUAGE.get("description"))
 async def reset_language(context: ApplicationContext) -> None:
     """Reset language for text-based commands output"""
     _languages.pop(context.channel.id, None)
     await context.respond("Set language to default")
 
 
-@_command(name=_DEEP_FRY_TEXT["name"], description=_DEEP_FRY_TEXT["description"])
+@_command(name=_DEEP_FRY_TEXT.get("name"), description=_DEEP_FRY_TEXT.get("description"))
 async def deep_fried_text(context: ApplicationContext) -> None:
     """Get a random deep-fried text"""
     await context.defer()
