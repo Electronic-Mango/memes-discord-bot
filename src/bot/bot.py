@@ -11,6 +11,8 @@ from bot.event.on_ready import OnReady
 from settings import BOT_TOKEN
 
 
+# TODO Perhaps a custom "help" command would be in order?
+# Default one wasn't very useful, since it didn't cover slash commands.
 def run_bot() -> None:
     """Create, configure and run the bot"""
     bot = Bot(help_command=None)
