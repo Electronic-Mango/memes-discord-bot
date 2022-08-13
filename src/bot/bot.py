@@ -14,7 +14,7 @@ from settings import BOT_TOKEN
 
 def run_bot() -> None:
     """Create, configure and run the bot"""
-    bot = Bot()
+    bot = Bot(help_command=None)
     bot.add_cog(OnConnect(bot))
     bot.add_cog(OnReady(bot))
     bot.add_cog(OnCommand())
