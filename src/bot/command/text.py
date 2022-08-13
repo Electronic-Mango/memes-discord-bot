@@ -36,15 +36,15 @@ class Text(Cog, name="Get a random text"):
         """Set language for text-based commands output"""
         if is_valid_language(target_language):
             self._languages[context.channel.id] = target_language
-            await context.reply(f"Set language to **{target_language}**")
+            await context.send(f"Set language to **{target_language}**")
         else:
-            await context.reply("Invalid language code!")
+            await context.send(f"**{target_language}** isn't a valid language")
 
     @command(name=_RESET_LANGUAGE_COMMAND_NAMES[0], aliases=_RESET_LANGUAGE_COMMAND_NAMES[1:])
     async def reset_language(self, context: Context) -> None:
         """Reset language for text-based commands output"""
         self._languages.pop(context.channel.id, None)
-        await context.reply("Set language to default")
+        await context.send("Set language to default")
 
     @command(name=_DEEP_FRIED_TEXT_COMMAND_NAMES[0], aliases=_DEEP_FRIED_TEXT_COMMAND_NAMES[1:])
     async def deep_fried_text(self, context: Context) -> None:
@@ -57,4 +57,4 @@ class Text(Cog, name="Get a random text"):
     async def _send_text(self, context: Context, text: str) -> None:
         sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
         for slice in sliced_text:
-            await context.reply(slice.strip())
+            await context.send(slice.strip())

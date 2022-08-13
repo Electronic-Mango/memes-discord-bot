@@ -27,7 +27,7 @@ class Media(Cog, name="Send back a random media (image, GIFs, videos, etc.)"):
         while getsizeof(media) > BOT_MAX_FILESIZE_BYTES:
             self._logger.info(f"[{url}] [{getsizeof(media)}] exceeds [{BOT_MAX_FILESIZE_BYTES}]")
             media, url = await self._get_media()
-        await context.reply(file=File(media, url.split("/")[-1]))
+        await context.send(file=File(media, url.split("/")[-1]))
 
     async def _get_media(self) -> tuple[bytes, str]:
         media_url = get_random_media_url()
