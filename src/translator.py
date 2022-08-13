@@ -8,7 +8,7 @@ from deep_translator import GoogleTranslator
 
 SUPPORTED_LANGUAGES = [
     *GoogleTranslator().get_supported_languages(),
-    *GoogleTranslator().get_supported_languages(as_dict=True).values()
+    *GoogleTranslator().get_supported_languages(as_dict=True).values(),
 ]
 
 _logger = getLogger(__name__)

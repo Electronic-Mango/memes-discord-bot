@@ -2,7 +2,7 @@
 Module creating the bot, adding all required Cogs and running it.
 """
 
-from discord.ext.commands import Bot, when_mentioned_or
+from discord.ext.commands import Bot
 
 from bot.command.media import media_command_group
 from bot.command.text import text_command_group
