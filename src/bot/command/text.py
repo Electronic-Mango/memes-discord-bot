@@ -6,12 +6,13 @@ Output language can be configured with dedicated command.
 from functools import reduce
 
 from discord import ApplicationContext, SlashCommandGroup
+from discord.commands import option
 from discord.utils import escape_markdown
 from more_itertools import sliced
 
 from resources import get_random_text
 from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGES, BOT_MAX_TEXT_MESSAGE_LENGTH
-from translator import is_valid_language, translate
+from translator import is_valid_language, SUPPORTED_LANGUAGES, translate
 
 _COMMAND = BOT_COMMANDS["text"]
 _COMMAND_GROUP_NAME = _COMMAND["group"]["group_name"]
@@ -37,14 +38,21 @@ async def text(context: ApplicationContext) -> None:
     await _send_text(context, text)
 
 
+async def _get_languages(context: ApplicationContext) -> list[str]:
+    input = context.value.lower()
+    return [language for language in SUPPORTED_LANGUAGES if language.startswith(input)]
+
+
+# TODO Perhaps "language" parameter could also be taken from "settings.yml"?
 @_command(name=_SET_LANGUAGE["name"], description=_SET_LANGUAGE["description"])
-async def set_language(context: ApplicationContext, *, target_language: str) -> None:
+@option("language", description=_SET_LANGUAGE["autocomplete_hint"], autocomplete=_get_languages)
+async def set_language(context: ApplicationContext, *, language: str) -> None:
     """Set language for text-based commands output"""
-    if is_valid_language(target_language):
-        _languages[context.channel.id] = target_language
-        await context.respond(f"Set language to **{target_language}**")
+    if is_valid_language(language):
+        _languages[context.channel.id] = language
+        await context.respond(f"Set language to **{language}**")
     else:
-        await context.respond(f"**{target_language}** isn't a valid language")
+        await context.respond(f"**{language}** isn't a valid language")
 
 
 @_command(name=_RESET_LANGUAGE["name"], description=_RESET_LANGUAGE["description"])

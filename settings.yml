@@ -42,6 +42,7 @@ bot:
         set_language:
           name: "setlanguage"
           description: "Set language for text messages"
+          autocomplete_hint: "Output language for text messages"
         reset_language:
           name: "resetlanguage"
           description: "Reset language for text messages"
