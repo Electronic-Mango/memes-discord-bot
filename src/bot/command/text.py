@@ -5,7 +5,7 @@ Output language can be configured with dedicated command.
 
 from functools import reduce
 
-from discord import ApplicationContext, SlashCommandGroup
+from discord import ApplicationContext, AutocompleteContext, SlashCommandGroup
 from discord.commands import option
 from discord.utils import escape_markdown
 from more_itertools import sliced
@@ -38,7 +38,7 @@ async def text(context: ApplicationContext) -> None:
     await _send_text(context, text)
 
 
-async def _get_languages(context: ApplicationContext) -> list[str]:
+async def _get_languages(context: AutocompleteContext) -> list[str]:
     input = context.value.lower()
     return [language for language in SUPPORTED_LANGUAGES if language.startswith(input)]
 
