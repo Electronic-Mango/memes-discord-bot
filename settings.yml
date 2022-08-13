@@ -29,6 +29,7 @@ bot:
       - text
     set_language:
       - setlanguage
+      - setlang
       - lang
       - language
     reset_language:
