@@ -24,21 +24,30 @@ bot:
   # all names will be replaced.
   commands:
     media:
-      - media
+      group:
+        group_name: "media"
+        description: "Commands related to sending back random media"
+      commands:
+        get:
+          name: "get"
+          description: "Get a random media"
     text:
-      - text
-    set_language:
-      - setlanguage
-      - setlang
-      - lang
-      - language
-    reset_language:
-      - resetlanguage
-      - resetlang
-    deep_fried_text:
-      - deepfriedtext
-      - dftext
-      - dft
+      group:
+        group_name: "text"
+        description: "Commands related to sending back a random text"
+      commands:
+        get:
+          name: "get"
+          description: "Get a random text message"
+        set_language:
+          name: "setlanguage"
+          description: "Set language for text messages"
+        reset_language:
+          name: "resetlanguage"
+          description: "Reset language for text messages"
+        deep_fry_text:
+          name: "deepfried"
+          description: "Get a random deep-fried text"
 sources:
   # YAML file containing all sources for commands.
   file: sources.yml
