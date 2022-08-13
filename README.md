@@ -54,12 +54,11 @@ If a necessary value isn't found in this custom file it will be taken from `sett
 
 Bot will load this custom file from path defined by `CUSTOM_SETTINGS_PATH` environment variable. It can also be defined in a `.env`.
 
-If you would like to use all default values except Discord bot token and bot prefix you can supply custom file such as:
+If you would like to use all default values except Discord bot token you can supply custom file such as:
 
 ```yaml
 bot:
   token: your-secret-bot-token
-  command_prefix: mybotprefix!
 ```
 
 Keep in mind, that when overwriting list entries entire list will be replaced, they won't be merged.

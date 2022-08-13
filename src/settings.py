@@ -35,8 +35,6 @@ def _load_config(*keys: tuple[str]) -> Any:
 
 
 BOT_TOKEN = _load_config("bot", "token")
-# TODO Prefix is most likely not needed now
-BOT_COMMAND_PREFIX = _load_config("bot", "command_prefix")
 BOT_MAX_FILESIZE_BYTES = _load_config("bot", "max_filesize_bytes")
 BOT_MAX_TEXT_MESSAGE_LENGTH = _load_config("bot", "max_text_message_length")
 BOT_DEEP_FRIED_LANGUAGES = _load_config("bot", "deep_fried_languages")

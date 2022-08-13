@@ -4,8 +4,6 @@
 bot:
   # Your Discord bot token.
   token:
-  # Command prefix for your bot.
-  command_prefix: "!"
   # Max possible filesize, by default on Discord it's 8MB.
   max_filesize_bytes: 8000000
   # Max character length for text messages, longer messages will be split into multiple messages.
@@ -18,6 +16,7 @@ bot:
   deep_fried_languages:
     - km
     - gu
+  # TODO Update this doc comment
   # Names and aliases for every command.
   # First element on the list is the main name, subsequent ones are optional aliases.
   # When overwritting in custom "settings.yml" you have to overwrite all names,
