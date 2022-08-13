@@ -173,17 +173,19 @@ When appropriate command is executed a random source is selected to get data fro
 **Bot assumes that each source will respond with a JSON, or will respond with needed data directly.**
 
 Source items for both sections are pretty much the same:
-|Key name|Type|Value|
-|-|-|-|
-|`url`|string|URL to get data from|
-|`keys`|list|keys where relevant data is located in received JSON|
-|`headers`|list|list of headers to add to request for this source|
-|`language`|string|relevant only for text sources, contains language of texts from this source|
+|Key name|Type|Value|Optional|Default|
+|-|-|-|-|-|
+|`url`|string|URL to get data from|no|—|
+|`keys`|list|keys where relevant data is located in received JSON|yes|raw output from source will be used|
+|`headers`|list|list of headers to add to request for this source|yes|no headers will be added to requests|
+|`language`|string|relevant only for text sources, contains language of texts from this source|yes|english|
 
 
 ### `url`
 
 It's just a URL for the source, most likely some kind of API URL.
+
+**`url` parameter is required for all sources.**
 
 
 ### `keys`
@@ -218,9 +220,12 @@ keys:
 ```
 
 If a source returns needed value directly, not through a JSON you can define an empty list for `keys`:
+
 ```yaml
 keys: []
 ```
+
+Or omit `keys` parameter entirely.
 
 
 ### `headers`
@@ -240,6 +245,7 @@ headers:
   - name: Authorization-Header
     value: secret-authorization-value
 ```
+
 Will cause these headers to be attached to GET request:
 
 ```json
@@ -249,15 +255,20 @@ Will cause these headers to be attached to GET request:
 }
 ```
 
+You can also omit this parameter if no headers are required.
+
 ### `language`
 
 Applicable only for text sources, defines language of texts from this source.
 Is used when deep-frying texts as a target language, if no target language is configured.
 
 For example, this will mark source as english:
+
 ```yaml
 language: en
 ```
+
+English is also used as default, if this parameter is missing.
 
 
 ### More examples
