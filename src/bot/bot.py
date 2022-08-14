@@ -17,9 +17,9 @@ from settings import BOT_TOKEN
 def run_bot() -> None:
     """Create, configure and run the bot"""
     bot = Bot()
-    bot.add_cog(MediaCog())
     bot.add_cog(OnConnect(bot))
     bot.add_cog(OnReady(bot))
     bot.add_cog(OnApplicationCommand())
+    bot.add_cog(MediaCog())
     bot.add_cog(TextCog())
     bot.run(BOT_TOKEN)

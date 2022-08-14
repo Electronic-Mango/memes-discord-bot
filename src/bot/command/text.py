@@ -3,8 +3,7 @@ Command Cog sending back a random text.
 Output language can be configured with dedicated command.
 """
 
-from functools import reduce
-
+from asyncstdlib import reduce
 from disnake import CommandInteraction
 from disnake.ext.commands import Cog, Param, slash_command
 from disnake.utils import escape_markdown
@@ -56,7 +55,7 @@ class TextCog(Cog):
         await interaction.response.defer()
         text, _ = await get_random_text()
         if interaction.channel.id in self._languages:
-            text = translate(text, self._languages[interaction.channel.id])
+            text = await translate(text, self._languages[interaction.channel.id])
         await self._send_text(interaction, text)
 
     @text.sub_command(name=_DEEP_FRY_TEXT_NAME, description=_DEEP_FRY_TEXT_DESCRIPTION)
@@ -64,8 +63,8 @@ class TextCog(Cog):
         """Get a random deep-fried text"""
         await interaction.response.defer()
         text, original_language = await get_random_text()
-        target_language = self._languages.get(interaction.channel.id, original_language)
-        deep_fried_text = reduce(translate, BOT_DEEP_FRIED_LANGUAGES + [target_language], text)
+        target_lang = self._languages.get(interaction.channel.id, original_language)
+        deep_fried_text = await reduce(translate, BOT_DEEP_FRIED_LANGUAGES + [target_lang], text)
         await self._send_text(interaction, deep_fried_text)
 
     @text.sub_command_group(name=_LANG_SUBGROUP_NAME, description=_LANG_SUBGROUP_DESCRIPTION)
