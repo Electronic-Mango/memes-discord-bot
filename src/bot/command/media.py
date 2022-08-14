@@ -2,11 +2,11 @@
 Command Cog sending back a random media (image, GIFs, videos, etc.).
 """
 
-from aiohttp import ClientSession
-from logging import getLogger
 from io import BytesIO
+from logging import getLogger
 from sys import getsizeof
 
+from aiohttp import ClientSession
 from discord import ApplicationContext, File, SlashCommandGroup
 
 from resources import get_random_media_url
