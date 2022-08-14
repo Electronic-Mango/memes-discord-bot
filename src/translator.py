@@ -14,7 +14,7 @@ _SUPPORTED_LANGUAGES = [
 _logger = getLogger(__name__)
 
 
-def translate(source: str, target_language: str) -> str:
+async def translate(source: str, target_language: str) -> str:
     """Translate text to a given language"""
     _logger.info(f"Translating text to [{target_language}]")
     return GoogleTranslator(target=target_language).translate(source)
