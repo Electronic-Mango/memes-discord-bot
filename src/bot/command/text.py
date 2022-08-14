@@ -12,7 +12,7 @@ from more_itertools import sliced
 
 from resources import get_random_text
 from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGES, BOT_MAX_TEXT_MESSAGE_LENGTH
-from translator import is_valid_language, SUPPORTED_LANGUAGES, translate
+from translator import SUPPORTED_LANGUAGES, is_valid_language, translate
 
 _TEXT_GROUP = BOT_COMMANDS["text_group"]
 _TEXT_GROUP_NAME = _TEXT_GROUP["name"]
