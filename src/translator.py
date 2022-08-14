@@ -6,7 +6,7 @@ from logging import getLogger
 
 from deep_translator import GoogleTranslator
 
-SUPPORTED_LANGUAGES = [
+_SUPPORTED_LANGUAGES = [
     *GoogleTranslator().get_supported_languages(),
     *GoogleTranslator().get_supported_languages(as_dict=True).values(),
 ]
@@ -20,8 +20,12 @@ def translate(source: str, target_language: str) -> str:
     return GoogleTranslator(target=target_language).translate(source)
 
 
-# TODO Does this needs to be a thing, if "supported languages" is public?
 def is_valid_language(language: str) -> bool:
     """Check if given language can be used as a target language for translation"""
     _logger.info(f"Checking validity [{language}]")
-    return language in SUPPORTED_LANGUAGES
+    return language in _SUPPORTED_LANGUAGES
+
+
+def supported_languages_matches(input: str) -> list[str]:
+    """Returns a list of potentially matching languages for a given input"""
+    return [language for language in _SUPPORTED_LANGUAGES if language.startswith(input)]

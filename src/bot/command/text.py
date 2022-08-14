@@ -12,7 +12,7 @@ from more_itertools import sliced
 
 from resources import get_random_text
 from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGES, BOT_MAX_TEXT_MESSAGE_LENGTH
-from translator import SUPPORTED_LANGUAGES, is_valid_language, translate
+from translator import is_valid_language, supported_languages_matches, translate
 
 _MAX_AUTOCOMPLETION_SIZE = 25
 
@@ -96,8 +96,7 @@ class TextCog(Cog):
 
     @set_language.autocomplete("language")
     async def _get_languages(self, _: CommandInteraction, input: str) -> list[str]:
-        matches = [language for language in SUPPORTED_LANGUAGES if language.startswith(input)]
-        return matches[:_MAX_AUTOCOMPLETION_SIZE]
+        return supported_languages_matches(input)[:_MAX_AUTOCOMPLETION_SIZE]
 
     async def _send_text(self, interaction: CommandInteraction, text: str) -> None:
         sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
