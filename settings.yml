@@ -22,32 +22,35 @@ bot:
   # When overwritting in custom "settings.yml" you have to overwrite all names,
   # all names will be replaced.
   commands:
-    media:
-      group:
-        group_name: "media"
-        description: "Commands related to sending back random media"
+    media_group:
+      name: "media"
+      description: "Commands related to sending back random media"
       commands:
         get:
           name: "get"
           description: "Get a random media"
-    text:
-      group:
-        group_name: "text"
-        description: "Commands related to sending back a random text"
+    text_group:
+      name: "text"
+      description: "Commands related to sending back a random text"
       commands:
         get:
           name: "get"
           description: "Get a random text message"
-        set_language:
-          name: "setlanguage"
-          description: "Set language for text messages"
-          autocomplete_hint: "Output language for text messages"
-        reset_language:
-          name: "resetlanguage"
-          description: "Reset language for text messages"
         deep_fry_text:
           name: "deepfried"
           description: "Get a random deep-fried text"
+      language_subgroup:
+        name: "language"
+        description: "Commands related to setting text messages language"
+        commands:
+          set:
+            name: "set"
+            description: "Set language for text messages"
+            autocomplete_hint: "Output language for text messages"
+          reset:
+            name: "reset"
+            description: "Reset language for text messages"
+
 sources:
   # YAML file containing all sources for commands.
   file: sources.yml
