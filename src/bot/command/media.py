@@ -16,7 +16,10 @@ from settings import BOT_COMMANDS, BOT_MAX_FILESIZE_BYTES
 _MEDIA_GROUP = BOT_COMMANDS["media_group"]
 _MEDIA_GROUP_NAME = _MEDIA_GROUP["name"]
 _MEDIA_GROUP_DESCRIPTION = _MEDIA_GROUP.get("description")
+
 _GET = _MEDIA_GROUP["commands"]["get"]
+_GET_NAME = _GET.get("name")
+_GET_DESCRIPTION = _GET.get("description")
 
 
 class MediaCog(Cog):
@@ -27,7 +30,7 @@ class MediaCog(Cog):
     async def media(self, _: CommandInteraction) -> None:
         pass
 
-    @media.sub_command(name=_GET.get("name"), description=_GET.get("description"))
+    @media.sub_command(name=_GET_NAME, description=_GET_DESCRIPTION)
     async def get_media(self, interaction: CommandInteraction) -> None:
         """Get a random media"""
         await interaction.response.defer()
