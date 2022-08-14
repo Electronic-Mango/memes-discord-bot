@@ -5,7 +5,9 @@ Module handling text translation.
 from logging import getLogger
 
 from deep_translator import GoogleTranslator
+from more_itertools import sliced
 
+_MAX_TRANSLATED_TEXT_SIZE = 4999
 _SUPPORTED_LANGUAGES = [
     *GoogleTranslator().get_supported_languages(),
     *GoogleTranslator().get_supported_languages(as_dict=True).values(),
@@ -17,7 +19,10 @@ _logger = getLogger(__name__)
 async def translate(source: str, target_language: str) -> str:
     """Translate text to a given language"""
     _logger.info(f"Translating text to [{target_language}]")
-    return GoogleTranslator(target=target_language).translate(source)
+    return "".join(
+        GoogleTranslator(target=target_language).translate(slice).strip()
+        for slice in sliced(source, _MAX_TRANSLATED_TEXT_SIZE)
+    )
 
 
 def is_valid_language(language: str) -> bool:
