@@ -14,19 +14,31 @@ from resources import get_random_text
 from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGES, BOT_MAX_TEXT_MESSAGE_LENGTH
 from translator import SUPPORTED_LANGUAGES, is_valid_language, translate
 
+_MAX_AUTOCOMPLETION_SIZE = 25
+
 _TEXT_GROUP = BOT_COMMANDS["text_group"]
 _TEXT_GROUP_NAME = _TEXT_GROUP["name"]
 _TEXT_GROUP_DESCRIPTION = _TEXT_GROUP.get("description")
+
 _GET = _TEXT_GROUP["commands"]["get"]
+_GET_NAME = _GET.get("name")
+_GET_DESCRIPTION = _GET.get("description")
+
 _DEEP_FRY_TEXT = _TEXT_GROUP["commands"]["deep_fry_text"]
+_DEEP_FRY_TEXT_NAME = _DEEP_FRY_TEXT.get("name")
+_DEEP_FRY_TEXT_DESCRIPTION = _DEEP_FRY_TEXT.get("description")
 
 _LANG_SUBGROUP = _TEXT_GROUP["language_subgroup"]
 _LANG_SUBGROUP_NAME = _LANG_SUBGROUP["name"]
 _LANG_SUBGROUP_DESCRIPTION = _LANG_SUBGROUP.get("description")
-_SET_LANG = _LANG_SUBGROUP["commands"]["set"]
-_RESET_LANG = _LANG_SUBGROUP["commands"]["reset"]
 
-_MAX_AUTOCOMPLETION_SIZE = 25
+_SET_LANG = _LANG_SUBGROUP["commands"]["set"]
+_SET_LANG_NAME = _SET_LANG.get("name")
+_SET_LANG_DESCRIPTION = _SET_LANG.get("description")
+
+_RESET_LANG = _LANG_SUBGROUP["commands"]["reset"]
+_RESET_LANG_NAME = _RESET_LANG.get("name")
+_RESET_LANG_DESCRIPTION = _RESET_LANG.get("description")
 
 
 class TextCog(Cog):
@@ -37,7 +49,7 @@ class TextCog(Cog):
     async def text(self, _: CommandInteraction) -> None:
         pass
 
-    @text.sub_command(name=_GET.get("name"), description=_GET.get("description"))
+    @text.sub_command(name=_GET_NAME, description=_GET_DESCRIPTION)
     async def get_text(self, interaction: CommandInteraction) -> None:
         """Get a random text message"""
         await interaction.response.defer()
@@ -46,7 +58,7 @@ class TextCog(Cog):
             text = translate(text, self._languages[interaction.channel.id])
         await self._send_text(interaction, text)
 
-    @text.sub_command(name=_DEEP_FRY_TEXT.get("name"), description=_DEEP_FRY_TEXT.get("description"))
+    @text.sub_command(name=_DEEP_FRY_TEXT_NAME, description=_DEEP_FRY_TEXT_DESCRIPTION)
     async def get_deep_fried_text(self, interaction: CommandInteraction) -> None:
         """Get a random deep-fried text"""
         await interaction.response.defer()
@@ -59,7 +71,7 @@ class TextCog(Cog):
     async def language(self, _: CommandInteraction) -> None:
         pass
 
-    @language.sub_command(name=_SET_LANG.get("name"), description=_SET_LANG.get("description"))
+    @language.sub_command(name=_SET_LANG_NAME, description=_SET_LANG_DESCRIPTION)
     async def set_language(self, interaction: CommandInteraction, language: str) -> None:
         """Set language for text-based commands output"""
         if is_valid_language(language):
@@ -68,7 +80,7 @@ class TextCog(Cog):
         else:
             await interaction.response.send_message(f"**{language}** isn't a valid language")
 
-    @language.sub_command(name=_RESET_LANG.get("name"), description=_RESET_LANG.get("description"))
+    @language.sub_command(name=_RESET_LANG_NAME, description=_RESET_LANG_DESCRIPTION)
     async def reset_language(self, interaction: CommandInteraction) -> None:
         """Reset language for text-based commands output"""
         self._languages.pop(interaction.channel.id, None)
