@@ -12,18 +12,18 @@ from discord import ApplicationContext, File, SlashCommandGroup
 from resources import get_random_media_url
 from settings import BOT_COMMANDS, BOT_MAX_FILESIZE_BYTES
 
-_COMMAND = BOT_COMMANDS["media"]
-_COMMAND_GROUP_NAME = _COMMAND["group"]["group_name"]
-_COMMAND_DESCRIPTION = _COMMAND["group"].get("description")
-_GET_COMMAND = _COMMAND["commands"]["get"]
+_MEDIA_GROUP = BOT_COMMANDS["media_group"]
+_MEDIA_GROUP_NAME = _MEDIA_GROUP["name"]
+_MEDIA_GROUP_DESCRIPTION = _MEDIA_GROUP.get("description")
+_GET = _MEDIA_GROUP["commands"]["get"]
 
 _logger = getLogger(__name__)
 
-media_command_group = SlashCommandGroup(_COMMAND_GROUP_NAME, _COMMAND_DESCRIPTION)
+media_command_group = SlashCommandGroup(_MEDIA_GROUP_NAME, _MEDIA_GROUP_DESCRIPTION)
 _command = media_command_group.command
 
 
-@_command(name=_GET_COMMAND.get("name"), description=_GET_COMMAND.get("description"))
+@_command(name=_GET.get("name"), description=_GET.get("description"))
 async def get_media(context: ApplicationContext) -> None:
     """Get a random media"""
     await context.defer()
