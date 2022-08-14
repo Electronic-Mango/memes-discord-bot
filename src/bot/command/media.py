@@ -41,7 +41,7 @@ class MediaCog(Cog):
         await interaction.send(file=File(media, url.split("/")[-1]))
 
     async def _get_media(self) -> tuple[bytes, str]:
-        media_url = get_random_media_url()
+        media_url = await get_random_media_url()
         media_bytes = await self._download_media(media_url)
         self._logger.info(f"Trying to send [{media_url}] [{getsizeof(media_bytes)}] bytes")
         return media_bytes, media_url
