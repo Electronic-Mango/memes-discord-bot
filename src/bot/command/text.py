@@ -87,8 +87,8 @@ class TextCog(Cog):
         await interaction.response.send_message("Set language to default")
 
     @set_language.autocomplete("language")
-    async def _get_languages(self, _: CommandInteraction, input_language: str) -> list[str]:
-        matches = [language for language in SUPPORTED_LANGUAGES if input_language in language]
+    async def _get_languages(self, _: CommandInteraction, input: str) -> list[str]:
+        matches = [language for language in SUPPORTED_LANGUAGES if language.startswith(input)]
         return matches[:_MAX_AUTOCOMPLETION_SIZE]
 
     async def _send_text(self, interaction: CommandInteraction, text: str) -> None:
