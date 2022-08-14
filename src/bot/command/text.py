@@ -6,7 +6,7 @@ Output language can be configured with dedicated command.
 from functools import reduce
 
 from disnake import CommandInteraction
-from disnake.ext.commands import Cog, slash_command
+from disnake.ext.commands import Cog, Param, slash_command
 from disnake.utils import escape_markdown
 from more_itertools import sliced
 
@@ -35,6 +35,7 @@ _LANG_SUBGROUP_DESCRIPTION = _LANG_SUBGROUP.get("description")
 _SET_LANG = _LANG_SUBGROUP["commands"]["set"]
 _SET_LANG_NAME = _SET_LANG.get("name")
 _SET_LANG_DESCRIPTION = _SET_LANG.get("description")
+_SET_LANG_PARAMETER_HINT = _SET_LANG.get("autocomplete_hint")
 
 _RESET_LANG = _LANG_SUBGROUP["commands"]["reset"]
 _RESET_LANG_NAME = _RESET_LANG.get("name")
@@ -72,7 +73,14 @@ class TextCog(Cog):
         pass
 
     @language.sub_command(name=_SET_LANG_NAME, description=_SET_LANG_DESCRIPTION)
-    async def set_language(self, interaction: CommandInteraction, language: str) -> None:
+    async def set_language(
+        self,
+        interaction: CommandInteraction,
+        language: str = Param(
+            description=_SET_LANG_PARAMETER_HINT,
+            converter=lambda _, input: input.lower(),
+        ),
+    ) -> None:
         """Set language for text-based commands output"""
         if is_valid_language(language):
             self._languages[interaction.channel.id] = language
