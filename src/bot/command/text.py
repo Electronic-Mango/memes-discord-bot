@@ -5,9 +5,9 @@ Output language can be configured with dedicated command.
 
 from functools import reduce
 
-from discord import ApplicationContext, AutocompleteContext, SlashCommandGroup
-from discord.commands import option
-from discord.utils import escape_markdown
+from disnake import CommandInteraction
+from disnake.ext.commands import Cog, slash_command
+from disnake.utils import escape_markdown
 from more_itertools import sliced
 
 from resources import get_random_text
@@ -20,66 +20,66 @@ _TEXT_GROUP_DESCRIPTION = _TEXT_GROUP.get("description")
 _GET = _TEXT_GROUP["commands"]["get"]
 _DEEP_FRY_TEXT = _TEXT_GROUP["commands"]["deep_fry_text"]
 
-_LANGUAGE_SUBGROUP = _TEXT_GROUP["language_subgroup"]
-_LANGUAGE_SUBGROUP_NAME = _LANGUAGE_SUBGROUP["name"]
-_LANGUAGE_SUBGROUP_DESCRIPTION = _LANGUAGE_SUBGROUP.get("description")
-_SET_LANGUAGE = _LANGUAGE_SUBGROUP["commands"]["set"]
-_RESET_LANGUAGE = _LANGUAGE_SUBGROUP["commands"]["reset"]
+_LANG_SUBGROUP = _TEXT_GROUP["language_subgroup"]
+_LANG_SUBGROUP_NAME = _LANG_SUBGROUP["name"]
+_LANG_SUBGROUP_DESCRIPTION = _LANG_SUBGROUP.get("description")
+_SET_LANG = _LANG_SUBGROUP["commands"]["set"]
+_RESET_LANG = _LANG_SUBGROUP["commands"]["reset"]
 
-_languages = dict()
-
-text_command_group = SlashCommandGroup(_TEXT_GROUP_NAME, _TEXT_GROUP_DESCRIPTION)
-_text_command = text_command_group.command
-_language_command_subgroup = text_command_group.create_subgroup(
-    _LANGUAGE_SUBGROUP_NAME, _LANGUAGE_SUBGROUP_DESCRIPTION
-)
-_lang_command = _language_command_subgroup.command
+_MAX_AUTOCOMPLETION_SIZE = 25
 
 
-@_text_command(name=_GET.get("name"), description=_GET.get("description"))
-async def text(context: ApplicationContext) -> None:
-    """Get a random text message"""
-    await context.defer()
-    text, _ = get_random_text()
-    if context.channel.id in _languages:
-        text = translate(text, _languages[context.channel.id])
-    await _send_text(context, text)
+class TextCog(Cog):
+    def __init__(self) -> None:
+        self._languages = dict()
 
+    @slash_command(name=_TEXT_GROUP_NAME, description=_TEXT_GROUP_DESCRIPTION)
+    async def text(self, _: CommandInteraction) -> None:
+        pass
 
-@_text_command(name=_DEEP_FRY_TEXT.get("name"), description=_DEEP_FRY_TEXT.get("description"))
-async def deep_fried_text(context: ApplicationContext) -> None:
-    """Get a random deep-fried text"""
-    await context.defer()
-    text, original_language = get_random_text()
-    target_language = _languages.get(context.channel.id, original_language)
-    deep_fried_text = reduce(translate, BOT_DEEP_FRIED_LANGUAGES + [target_language], text)
-    await _send_text(context, deep_fried_text)
+    @text.sub_command(name=_GET.get("name"), description=_GET.get("description"))
+    async def get_text(self, interaction: CommandInteraction) -> None:
+        """Get a random text message"""
+        await interaction.response.defer()
+        text, _ = get_random_text()
+        if interaction.channel.id in self._languages:
+            text = translate(text, self._languages[interaction.channel.id])
+        await self._send_text(interaction, text)
 
+    @text.sub_command(name=_DEEP_FRY_TEXT.get("name"), description=_DEEP_FRY_TEXT.get("description"))
+    async def get_deep_fried_text(self, interaction: CommandInteraction) -> None:
+        """Get a random deep-fried text"""
+        await interaction.response.defer()
+        text, original_language = get_random_text()
+        target_language = self._languages.get(interaction.channel.id, original_language)
+        deep_fried_text = reduce(translate, BOT_DEEP_FRIED_LANGUAGES + [target_language], text)
+        await self._send_text(interaction, deep_fried_text)
 
-async def _send_text(context: ApplicationContext, text: str) -> None:
-    sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
-    for slice in sliced_text:
-        await context.respond(slice.strip())
+    @text.sub_command_group(name=_LANG_SUBGROUP_NAME, description=_LANG_SUBGROUP_DESCRIPTION)
+    async def language(self, _: CommandInteraction) -> None:
+        pass
 
+    @language.sub_command(name=_SET_LANG.get("name"), description=_SET_LANG.get("description"))
+    async def set_language(self, interaction: CommandInteraction, language: str) -> None:
+        """Set language for text-based commands output"""
+        if is_valid_language(language):
+            self._languages[interaction.channel.id] = language
+            await interaction.response.send_message(f"Set language to **{language}**")
+        else:
+            await interaction.response.send_message(f"**{language}** isn't a valid language")
 
-async def _get_languages(context: AutocompleteContext) -> list[str]:
-    input = context.value.lower()
-    return [language for language in SUPPORTED_LANGUAGES if language.startswith(input)]
+    @language.sub_command(name=_RESET_LANG.get("name"), description=_RESET_LANG.get("description"))
+    async def reset_language(self, interaction: CommandInteraction) -> None:
+        """Reset language for text-based commands output"""
+        self._languages.pop(interaction.channel.id, None)
+        await interaction.response.send_message("Set language to default")
 
+    @set_language.autocomplete("language")
+    async def _get_languages(self, _: CommandInteraction, input_language: str) -> list[str]:
+        matches = [language for language in SUPPORTED_LANGUAGES if input_language in language]
+        return matches[:_MAX_AUTOCOMPLETION_SIZE]
 
-@_lang_command(name=_SET_LANGUAGE.get("name"), description=_SET_LANGUAGE.get("description"))
-@option("language", description=_SET_LANGUAGE.get("autocomplete_hint"), autocomplete=_get_languages)
-async def set_language(context: ApplicationContext, *, language: str) -> None:
-    """Set language for text-based commands output"""
-    if is_valid_language(language):
-        _languages[context.channel.id] = language
-        await context.respond(f"Set language to **{language}**")
-    else:
-        await context.respond(f"**{language}** isn't a valid language")
-
-
-@_lang_command(name=_RESET_LANGUAGE.get("name"), description=_RESET_LANGUAGE.get("description"))
-async def reset_language(context: ApplicationContext) -> None:
-    """Reset language for text-based commands output"""
-    _languages.pop(context.channel.id, None)
-    await context.respond("Set language to default")
+    async def _send_text(self, interaction: CommandInteraction, text: str) -> None:
+        sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
+        for slice in sliced_text:
+            await interaction.send(slice.strip())

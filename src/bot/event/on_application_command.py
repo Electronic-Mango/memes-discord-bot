@@ -4,8 +4,8 @@ Event Cog logging information about called command.
 
 from logging import getLogger
 
-from discord import ApplicationContext
-from discord.ext.commands import Cog
+from disnake import ApplicationCommandInteraction
+from disnake.ext.commands import Cog
 
 
 class OnApplicationCommand(Cog):
@@ -13,9 +13,9 @@ class OnApplicationCommand(Cog):
         self._logger = getLogger(__name__)
 
     @Cog.listener()
-    async def on_application_command(self, context: ApplicationContext) -> None:
+    async def on_application_command(self, context: ApplicationCommandInteraction) -> None:
         server = context.guild.name if context.guild else None
         channel = context.channel
         user = context.author
-        command = context.command
+        command = context.application_command.qualified_name
         self._logger.info(f"[{server}] [{channel}] [{user}] [{command}]")
