@@ -4,7 +4,7 @@ Event Cog logging information that bot is ready.
 
 from logging import getLogger
 
-from discord.ext.commands import Bot, Cog
+from disnake.ext.commands import Bot, Cog
 
 
 class OnReady(Cog):

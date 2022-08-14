@@ -2,10 +2,10 @@
 Module creating the bot, adding all required Cogs and running it.
 """
 
-from discord.ext.commands import Bot
+from disnake.ext.commands import Bot
 
-from bot.command.media import media_command_group
-from bot.command.text import text_command_group
+from bot.command.media import MediaCog
+from bot.command.text import TextCog
 from bot.event.on_application_command import OnApplicationCommand
 from bot.event.on_connect import OnConnect
 from bot.event.on_ready import OnReady
@@ -16,10 +16,10 @@ from settings import BOT_TOKEN
 # Default one wasn't very useful, since it didn't cover slash commands.
 def run_bot() -> None:
     """Create, configure and run the bot"""
-    bot = Bot(help_command=None)
+    bot = Bot()
+    bot.add_cog(MediaCog())
     bot.add_cog(OnConnect(bot))
     bot.add_cog(OnReady(bot))
     bot.add_cog(OnApplicationCommand())
-    bot.add_application_command(media_command_group)
-    bot.add_application_command(text_command_group)
+    bot.add_cog(TextCog())
     bot.run(BOT_TOKEN)

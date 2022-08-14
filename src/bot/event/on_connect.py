@@ -4,7 +4,7 @@ Event Cog logging information about connection establishment.
 
 from logging import getLogger
 
-from discord.ext.commands import Bot, Cog
+from disnake.ext.commands import Bot, Cog
 
 
 class OnConnect(Cog):
