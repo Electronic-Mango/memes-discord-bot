@@ -54,7 +54,7 @@ class TextCog(Cog):
     async def get_text(self, interaction: CommandInteraction) -> None:
         """Get a random text message"""
         await interaction.response.defer()
-        text, _ = get_random_text()
+        text, _ = await get_random_text()
         if interaction.channel.id in self._languages:
             text = translate(text, self._languages[interaction.channel.id])
         await self._send_text(interaction, text)
@@ -63,7 +63,7 @@ class TextCog(Cog):
     async def get_deep_fried_text(self, interaction: CommandInteraction) -> None:
         """Get a random deep-fried text"""
         await interaction.response.defer()
-        text, original_language = get_random_text()
+        text, original_language = await get_random_text()
         target_language = self._languages.get(interaction.channel.id, original_language)
         deep_fried_text = reduce(translate, BOT_DEEP_FRIED_LANGUAGES + [target_language], text)
         await self._send_text(interaction, deep_fried_text)
