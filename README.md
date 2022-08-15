@@ -62,17 +62,6 @@ bot:
 ```
 
 Keep in mind, that when overwriting list entries entire list will be replaced, they won't be merged.
-For example, when overwriting command name and aliases you have to provide full list:
-
-```yaml
-bot:
-  commands:
-    media:
-      - custom-media-command-name
-      - custom-media-command-alias-1
-      - custom-media-command-alias-2
-      - custom-media-command-alias-3
-```
 
 
 ### Docker configuration
@@ -125,15 +114,18 @@ This will require modification to `docker-compose.yml`.
 
 ## Commands
 
-(Almost) all command names and their aliases can be configured through `settings.yml`, or through a custom settings YAML.
-There are present default values in `settings.yml` which can be used as-is.
+All bot commands are slash-commands.
+Start typing `/` and Discord will suggest them.
+Since all commands and their descriptions are listed there bot doesn't have a help command.
 
- * `help` - prints help message, its name cannot be modified through `settings.yml`
- * `media` - sends back a media item (image, GIF, video, etc)
- * `text` - sends back a text message
- * `setlanguage` - sets language of text messages
- * `resetlanguage` - resets language of text messages to default
- * `deepfriedtext` - sends back a "deep-fried" text message
+All command names and descriptions can be configured through `settings.yml`, or through a custom settings YAML.
+There are default values in `settings.yml` which can be used as-is.
+
+ * `/media get` - sends back a media item (image, GIF, video, etc)
+ * `/text get` - sends back a text message
+ * `/text deepfried` - sends back a "deep-fried" text message
+ * `/text language set <language>` - sets language of text messages, `<language>` parameter is required but autocompletion for it is enabled
+ * `/text language reset` - resets language of text messages to default
 
 Sources for media and texts are in `sources.yml` file, or whichever file is configured in `settings.yml`.
 
@@ -147,7 +139,7 @@ Translation is done through [`deep_translator`](https://github.com/nidhaloff/dee
 ### Deep-fried text messages
 
 What does it mean?
-Before a text from a source is send back, it's translated through multiple languages, then to either original language or target language configured via `setlanguage` command.
+Before a text from a source is send back, it's translated through multiple languages, then to either original language or target language configured via `/text language set` command.
 
 Translating between multiple different languages causes texts to be weirdly distorted and strange, which is the point of this command.
 
