@@ -4,7 +4,7 @@
 [![Black](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/black.yml/badge.svg)](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/black.yml)
 [![Flake8](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/flake8.yml/badge.svg)](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/flake8.yml)
 
-A simple Discord bot sending memes and copypastas via Discord, build with [`discord.py`](https://github.com/Rapptz/discord.py) and [`deep_translator`](https://github.com/nidhaloff/deep-translator).
+A simple Discord bot sending memes and copypastas via Discord, build with [`disnake`](https://github.com/DisnakeDev/disnake) and [`deep_translator`](https://github.com/nidhaloff/deep-translator).
 
 
 
