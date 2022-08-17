@@ -2,7 +2,7 @@
 Module creating the bot, adding all required Cogs and running it.
 """
 
-from disnake.ext.commands import Bot
+from disnake.ext.commands import InteractionBot
 
 from bot.command.help import HelpCog
 from bot.command.media import MediaCog
@@ -15,7 +15,7 @@ from settings import BOT_TOKEN
 
 def run_bot() -> None:
     """Create, configure and run the bot"""
-    bot = Bot(help_command=None)
+    bot = InteractionBot()
     bot.add_cog(OnConnect(bot))
     bot.add_cog(OnReady(bot))
     bot.add_cog(OnApplicationCommand())
