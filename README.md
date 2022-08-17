@@ -116,11 +116,11 @@ This will require modification to `docker-compose.yml`.
 
 All bot commands are slash-commands.
 Start typing `/` and Discord will suggest them.
-Since all commands and their descriptions are listed there bot doesn't have a help command.
 
 All command names and descriptions can be configured through `settings.yml`, or through a custom settings YAML.
 There are default values in `settings.yml` which can be used as-is.
 
+ * `/help` - prints a simple help message describing all commands
  * `/media get` - sends back a media item (image, GIF, video, etc)
  * `/text get` - sends back a text message
  * `/text deepfried` - sends back a "deep-fried" text message
