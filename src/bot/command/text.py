@@ -17,7 +17,6 @@ _MAX_AUTOCOMPLETION_SIZE = 25
 
 _TEXT_GROUP = BOT_COMMANDS["text_group"]
 _TEXT_GROUP_NAME = _TEXT_GROUP["name"]
-_TEXT_GROUP_DESCRIPTION = _TEXT_GROUP.get("description")
 
 _GET = _TEXT_GROUP["commands"]["get"]
 _GET_NAME = _GET.get("name")
@@ -29,7 +28,6 @@ _DEEP_FRY_TEXT_DESCRIPTION = _DEEP_FRY_TEXT.get("description")
 
 _LANG_SUBGROUP = _TEXT_GROUP["language_subgroup"]
 _LANG_SUBGROUP_NAME = _LANG_SUBGROUP["name"]
-_LANG_SUBGROUP_DESCRIPTION = _LANG_SUBGROUP.get("description")
 
 _SET_LANG = _LANG_SUBGROUP["commands"]["set"]
 _SET_LANG_NAME = _SET_LANG.get("name")
@@ -54,7 +52,7 @@ class TextCog(Cog):
     def __init__(self) -> None:
         self._languages = dict()
 
-    @slash_command(name=_TEXT_GROUP_NAME, description=_TEXT_GROUP_DESCRIPTION)
+    @slash_command(name=_TEXT_GROUP_NAME)
     async def text(self, _: CommandInteraction) -> None:
         pass
 
@@ -76,7 +74,7 @@ class TextCog(Cog):
         deep_fried_text = await reduce(translate, BOT_DEEP_FRIED_LANGUAGES + [target_lang], text)
         await self._send_text(interaction, deep_fried_text)
 
-    @text.sub_command_group(name=_LANG_SUBGROUP_NAME, description=_LANG_SUBGROUP_DESCRIPTION)
+    @text.sub_command_group(name=_LANG_SUBGROUP_NAME)
     async def language(self, _: CommandInteraction) -> None:
         pass
 

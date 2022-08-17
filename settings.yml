@@ -22,7 +22,6 @@ bot:
     media_group:
       # Name of this group, for command like "/media get" this defines "media" part.
       name: "media"
-      description: "Commands related to sending back random media"
       # Commands within "media" group
       commands:
         # "/media get" command.
@@ -35,7 +34,6 @@ bot:
     # Parameters are similar as for "media" group and its commands.
     text_group:
       name: "text"
-      description: "Commands related to sending back a random text"
       commands:
         get:
           name: "get"
@@ -46,7 +44,6 @@ bot:
       # "language" subgroup in "text" group.
       language_subgroup:
         name: "language"
-        description: "Commands related to setting text messages language"
         commands:
           set:
             name: "set"

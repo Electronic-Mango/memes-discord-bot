@@ -15,7 +15,6 @@ from settings import BOT_COMMANDS, BOT_MAX_FILESIZE_BYTES
 
 _MEDIA_GROUP = BOT_COMMANDS["media_group"]
 _MEDIA_GROUP_NAME = _MEDIA_GROUP["name"]
-_MEDIA_GROUP_DESCRIPTION = _MEDIA_GROUP.get("description")
 
 _GET = _MEDIA_GROUP["commands"]["get"]
 _GET_NAME = _GET.get("name")
@@ -30,7 +29,7 @@ class MediaCog(Cog):
     def __init__(self) -> None:
         self._logger = getLogger(__name__)
 
-    @slash_command(name=_MEDIA_GROUP_NAME, description=_MEDIA_GROUP_DESCRIPTION)
+    @slash_command(name=_MEDIA_GROUP_NAME)
     async def media(self, _: CommandInteraction) -> None:
         pass
 
