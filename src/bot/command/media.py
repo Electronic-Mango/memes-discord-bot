@@ -21,6 +21,10 @@ _GET = _MEDIA_GROUP["commands"]["get"]
 _GET_NAME = _GET.get("name")
 _GET_DESCRIPTION = _GET.get("description")
 
+HELP_MESSAGE = f"""
+`/{_MEDIA_GROUP_NAME} {_GET_NAME}` - sends back a media item (image, GIF, video, etc)
+"""
+
 
 class MediaCog(Cog):
     def __init__(self) -> None:

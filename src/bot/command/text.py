@@ -40,6 +40,15 @@ _RESET_LANG = _LANG_SUBGROUP["commands"]["reset"]
 _RESET_LANG_NAME = _RESET_LANG.get("name")
 _RESET_LANG_DESCRIPTION = _RESET_LANG.get("description")
 
+HELP_MESSAGE = f"""
+`/{_TEXT_GROUP_NAME} {_GET_NAME}` - sends back a text message
+`/{_TEXT_GROUP_NAME} {_DEEP_FRY_TEXT_NAME}` - sends back a "deep-fried" text message
+`/{_TEXT_GROUP_NAME} {_LANG_SUBGROUP_NAME} {_SET_LANG_NAME} <language>`\
+ - sets language of text messages
+`/{_TEXT_GROUP_NAME} {_LANG_SUBGROUP_NAME} {_RESET_LANG_NAME}`\
+ - resets language of text messages to default
+"""
+
 
 class TextCog(Cog):
     def __init__(self) -> None:
@@ -87,15 +96,15 @@ class TextCog(Cog):
         else:
             await interaction.response.send_message(f"**{language}** isn't a valid language")
 
+    @set_language.autocomplete("language")
+    async def _get_languages(self, _: CommandInteraction, input: str) -> list[str]:
+        return supported_languages_matches(input)[:_MAX_AUTOCOMPLETION_SIZE]
+
     @language.sub_command(name=_RESET_LANG_NAME, description=_RESET_LANG_DESCRIPTION)
     async def reset_language(self, interaction: CommandInteraction) -> None:
         """Reset language for text-based commands output"""
         self._languages.pop(interaction.channel.id, None)
         await interaction.response.send_message("Set language to default")
-
-    @set_language.autocomplete("language")
-    async def _get_languages(self, _: CommandInteraction, input: str) -> list[str]:
-        return supported_languages_matches(input)[:_MAX_AUTOCOMPLETION_SIZE]
 
     async def _send_text(self, interaction: CommandInteraction, text: str) -> None:
         sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
