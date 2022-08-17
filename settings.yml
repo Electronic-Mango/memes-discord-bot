@@ -16,19 +16,23 @@ bot:
   deep_fried_languages:
     - km
     - gu
-  # TODO Update this doc comment
-  # Names and aliases for every command.
-  # First element on the list is the main name, subsequent ones are optional aliases.
-  # When overwritting in custom "settings.yml" you have to overwrite all names,
-  # all names will be replaced.
+  # Names, descriptions and other additional configuration for every command and subcommand.
   commands:
+    # Group of commands related to sending random media.
     media_group:
+      # Name of this group, for command like "/media get" this defines "media" part.
       name: "media"
       description: "Commands related to sending back random media"
+      # Commands within "media" group
       commands:
+        # "/media get" command.
         get:
+          # "/media get" command name, this defines "get" part.
           name: "get"
+          # "/media get" command description which is displayed as command hint.
           description: "Get a random media"
+    # Group of commands related to sending random text.
+    # Parameters are similar as for "media" group and its commands.
     text_group:
       name: "text"
       description: "Commands related to sending back a random text"
@@ -39,6 +43,7 @@ bot:
         deep_fry_text:
           name: "deepfried"
           description: "Get a random deep-fried text"
+      # "language" subgroup in "text" group.
       language_subgroup:
         name: "language"
         description: "Commands related to setting text messages language"
@@ -46,6 +51,7 @@ bot:
           set:
             name: "set"
             description: "Set language for text messages"
+            # Hint displayed when user inputs language parameter itself.
             autocomplete_hint: "Output language for text messages"
           reset:
             name: "reset"
