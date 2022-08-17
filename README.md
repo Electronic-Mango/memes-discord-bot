@@ -1,16 +1,17 @@
-# Memes Discord bot
+# Random media Discord bot
 
-[![CodeQL](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/codeql-analysis.yml)
-[![Black](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/black.yml/badge.svg)](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/black.yml)
-[![Flake8](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/flake8.yml/badge.svg)](https://github.com/Electronic-Mango/memes-discord-bot/actions/workflows/flake8.yml)
+[![CodeQL](https://github.com/Electronic-Mango/random-media-discord-bot/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Electronic-Mango/random-media-discord-bot/actions/workflows/codeql-analysis.yml)
+[![Black](https://github.com/Electronic-Mango/random-media-discord-bot/actions/workflows/black.yml/badge.svg)](https://github.com/Electronic-Mango/random-media-discord-bot/actions/workflows/black.yml)
+[![Flake8](https://github.com/Electronic-Mango/random-media-discord-bot/actions/workflows/flake8.yml/badge.svg)](https://github.com/Electronic-Mango/random-media-discord-bot/actions/workflows/flake8.yml)
 
-A simple Discord bot sending memes and copypastas via Discord, build with [`disnake`](https://github.com/DisnakeDev/disnake) and [`deep_translator`](https://github.com/nidhaloff/deep-translator).
+A simple Discord bot sending random images, GIFs, videos and texts via Discord, build with [`disnake`](https://github.com/DisnakeDev/disnake) and [`deep_translator`](https://github.com/nidhaloff/deep-translator).
 
 
 
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
+- [Why? What it's for?](#why-what-its-for)
 - [Requirements](#requirements)
 - [Configuration](#configuration)
   - [Overwriting default values](#overwriting-default-values)
@@ -28,7 +29,18 @@ A simple Discord bot sending memes and copypastas via Discord, build with [`disn
   - [`language`](#language)
   - [More examples](#more-examples)
 - [Media and text size limits](#media-and-text-size-limits)
-- [Why? What it's for?](#why-what-its-for)
+
+
+
+## Why? What it's for?
+
+Memes!
+At least that's what I use this bot for.
+You can supply media sources for some memes and text sources for copypastas from the internet and get yourself a nice memes Discord bot.
+
+Or you can use it to send inspirational quotes and images if it suites you more.
+Or cute pictures of cats.
+Overall usage can be pretty generic.
 
 
 
@@ -279,13 +291,3 @@ Keep this in mind when selecting sources, since downloading large files can slow
 Max length of text message is defined in `settings.yml` under `max_text_message_length`, by default it's 2000 characters.
 Longer messages will be split into multiple messages, each up to `max_text_message_length` characters long.
 Bot doesn't try and do this in any smart way, it just splits after `max_text_message_length` characters, so words can be split in half.
-
-
-
-## Why? What it's for?
-
-Memes!
-At least that's what I use this bot for.
-You can supply media sources for some memes and text sources for copypastas from the internet and get yourselft a nice memes Discord bot.
-
-Or you can use it to send inspirational quotes and images if it suites you more. Overall usage can be pretty generic.
