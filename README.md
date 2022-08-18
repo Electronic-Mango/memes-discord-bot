@@ -10,7 +10,6 @@ A simple Discord bot sending random images, GIFs, videos and texts via Discord, 
 
 ## Table of contents
 
-- [Table of contents](#table-of-contents)
 - [Why? What it's for?](#why-what-its-for)
 - [Requirements](#requirements)
 - [Configuration](#configuration)
