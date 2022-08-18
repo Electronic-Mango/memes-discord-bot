@@ -217,9 +217,9 @@ In order to get to `the actual value which should be extracted` value within the
 
 ```yaml
 keys:
-  - "source"
-  - "value"
-  - "data"
+  - source
+  - value
+  - data
 ```
 
 If a source returns needed value directly, not through a JSON you can define an empty list for `keys`:

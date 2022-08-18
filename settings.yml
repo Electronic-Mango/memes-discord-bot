@@ -21,38 +21,38 @@ bot:
     # Group of commands related to sending random media.
     media_group:
       # Name of this group, for command like "/media get" this defines "media" part.
-      name: "media"
+      name: media
       # Commands within "media" group
       commands:
         # "/media get" command.
         get:
           # "/media get" command name, this defines "get" part.
-          name: "get"
+          name: get
           # "/media get" command description which is displayed as command hint.
-          description: "Get a random media"
+          description: Get a random media
     # Group of commands related to sending random text.
     # Parameters are similar as for "media" group and its commands.
     text_group:
-      name: "text"
+      name: text
       commands:
         get:
-          name: "get"
-          description: "Get a random text message"
+          name: get
+          description: Get a random text message
         deep_fry_text:
-          name: "deepfried"
-          description: "Get a random deep-fried text"
+          name: deepfried
+          description: Get a random deep-fried text
       # "language" subgroup in "text" group.
       language_subgroup:
-        name: "language"
+        name: language
         commands:
           set:
-            name: "set"
-            description: "Set language for text messages"
+            name: set
+            description: Set language for text messages
             # Hint displayed when user inputs language parameter itself.
-            autocomplete_hint: "Output language for text messages"
+            autocomplete_hint: Output language for text messages
           reset:
-            name: "reset"
-            description: "Reset language for text messages"
+            name: reset
+            description: Reset language for text messages
 
 sources:
   # YAML file containing all sources for commands.
