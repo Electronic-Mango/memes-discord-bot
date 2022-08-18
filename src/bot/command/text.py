@@ -39,12 +39,10 @@ _RESET_LANG_NAME = _RESET_LANG.get("name")
 _RESET_LANG_DESCRIPTION = _RESET_LANG.get("description")
 
 HELP_MESSAGE = f"""
-`/{_TEXT_GROUP_NAME} {_GET_NAME}` - sends back a text message
-`/{_TEXT_GROUP_NAME} {_DEEP_FRY_TEXT_NAME}` - sends back a "deep-fried" text message
-`/{_TEXT_GROUP_NAME} {_LANG_SUBGROUP_NAME} {_SET_LANG_NAME} <language>`\
- - sets language of text messages
-`/{_TEXT_GROUP_NAME} {_LANG_SUBGROUP_NAME} {_RESET_LANG_NAME}`\
- - resets language of text messages to default
+`/{_TEXT_GROUP_NAME} {_GET_NAME}` - {_GET_DESCRIPTION}
+`/{_TEXT_GROUP_NAME} {_DEEP_FRY_TEXT_NAME}` - {_DEEP_FRY_TEXT_DESCRIPTION}
+`/{_TEXT_GROUP_NAME} {_LANG_SUBGROUP_NAME} {_SET_LANG_NAME} <language>` - {_SET_LANG_DESCRIPTION}
+`/{_TEXT_GROUP_NAME} {_LANG_SUBGROUP_NAME} {_RESET_LANG_NAME}` - {_RESET_LANG_DESCRIPTION}
 """
 
 
