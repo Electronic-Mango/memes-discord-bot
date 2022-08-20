@@ -59,5 +59,7 @@ sources:
   file: sources.yml
 
 db:
+  # Path to SQLite DB file storing configured text language per Discord channel.
   path: languages.db
+  # Table name withing SQLite DB used for storing languages.
   table_name: language
