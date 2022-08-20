@@ -15,6 +15,7 @@ A simple Discord bot sending random images, GIFs, videos and texts via Discord, 
 - [Configuration](#configuration)
   - [Overwriting default values](#overwriting-default-values)
   - [Docker configuration](#docker-configuration)
+  - [Storing configured language per Discord channel](#storing-configured-language-per-discord-channel)
 - [Running the bot](#running-the-bot)
   - [From source](#from-source)
   - [Docker](#docker)
@@ -94,6 +95,30 @@ Specifically it will copy all files with `.yml` extension.
 
 This will require rebuilding the image every time you make a change, even to the custom one.
 To get around this, you can define a mounted volume in `docker-compose.yml` with your custom settings YAML and modify value of `CUSTOM_SETTINGS_PATH` accordingly.
+
+
+### Storing configured language per Discord channel
+
+Languages for texts in a given Discord channel are stored in a SQLite database.
+You can configure its location and table name via `settings.yml`:
+
+```yml
+db:
+  # Path to SQLite DB file storing configured text language per Discord channel.
+  path: languages.db
+  # Table name withing SQLite DB used for storing languages.
+  table_name: language
+```
+
+In case of Docker deployment you might want to store DB file in a mounted volume, rather than in the container itself.
+This way data won't be lost if you recreate the container.
+
+This applies only when user changed the default language via `/text language set` command.
+Default languages are not stored in the database.
+
+Restoring the language to default, via `/text language reset` command, removes data about current channel from the database.
+
+The only data stored is channel ID and selected language.
 
 
 
