@@ -9,6 +9,7 @@ from disnake.ext.commands import Cog, Param, slash_command
 from disnake.utils import escape_markdown
 from more_itertools import sliced
 
+from db.wrapper import get_language, remove_language, store_language
 from resources import get_random_text
 from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGES, BOT_MAX_TEXT_MESSAGE_LENGTH
 from translator import is_valid_language, supported_languages_matches, translate
@@ -47,9 +48,6 @@ HELP_MESSAGE = f"""
 
 
 class TextCog(Cog):
-    def __init__(self) -> None:
-        self._languages = dict()
-
     @slash_command(name=_TEXT_GROUP_NAME)
     async def text(self, _: CommandInteraction) -> None:
         pass
@@ -59,8 +57,8 @@ class TextCog(Cog):
         """Get a random text message"""
         await interaction.response.defer()
         text, _ = await get_random_text()
-        if interaction.channel.id in self._languages:
-            text = await translate(text, self._languages[interaction.channel.id])
+        if language := get_language(interaction.channel.id):
+            text = await translate(text, language)
         await self._send_text(interaction, text)
 
     @text.sub_command(name=_DEEP_FRY_TEXT_NAME, description=_DEEP_FRY_TEXT_DESCRIPTION)
@@ -68,7 +66,7 @@ class TextCog(Cog):
         """Get a random deep-fried text"""
         await interaction.response.defer()
         text, original_language = await get_random_text()
-        target_lang = self._languages.get(interaction.channel.id, original_language)
+        target_lang = get_language(interaction.channel.id) or original_language
         deep_fried_text = await reduce(translate, BOT_DEEP_FRIED_LANGUAGES + [target_lang], text)
         await self._send_text(interaction, deep_fried_text)
 
@@ -86,11 +84,12 @@ class TextCog(Cog):
         ),
     ) -> None:
         """Set language for text-based commands output"""
+        await interaction.response.defer()
         if is_valid_language(language):
-            self._languages[interaction.channel.id] = language
-            await interaction.response.send_message(f"Set language to **{language}**")
+            store_language(interaction.channel.id, language)
+            await interaction.send(f"Set language to **{language}**")
         else:
-            await interaction.response.send_message(f"**{language}** isn't a valid language")
+            await interaction.send(f"**{language}** isn't a valid language")
 
     @set_language.autocomplete("language")
     async def _get_languages(self, _: CommandInteraction, input: str) -> list[str]:
@@ -99,8 +98,9 @@ class TextCog(Cog):
     @language.sub_command(name=_RESET_LANG_NAME, description=_RESET_LANG_DESCRIPTION)
     async def reset_language(self, interaction: CommandInteraction) -> None:
         """Reset language for text-based commands output"""
-        self._languages.pop(interaction.channel.id, None)
-        await interaction.response.send_message("Set language to default")
+        await interaction.response.defer()
+        remove_language(interaction.channel.id)
+        await interaction.send("Set language to default")
 
     async def _send_text(self, interaction: CommandInteraction, text: str) -> None:
         sliced_text = sliced(escape_markdown(text), BOT_MAX_TEXT_MESSAGE_LENGTH)
