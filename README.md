@@ -119,6 +119,17 @@ Default languages are not stored in the database.
 Restoring the language to default, via `/text language reset` command, removes data about current channel from the database.
 
 The only data stored is channel ID and selected language.
+Full table schema is as follows:
+
+```sql
+CREATE TABLE language (
+        channel_id INTEGER NOT NULL, 
+        language VARCHAR NOT NULL, 
+        PRIMARY KEY (channel_id)
+);
+```
+
+Where name table name, here it's `language`, can be configured in `settings.yml`.
 
 
 
