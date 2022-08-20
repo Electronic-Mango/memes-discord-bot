@@ -6,10 +6,12 @@ Configures logging and starts the bot.
 from logging import INFO, basicConfig
 
 from bot.bot import run_bot
+from db.wrapper import initialize_database
 
 
 def _main() -> None:
     _configure_logging()
+    initialize_database()
     run_bot()
 
 
