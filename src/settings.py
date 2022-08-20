@@ -41,3 +41,6 @@ BOT_DEEP_FRIED_LANGUAGES = _load_config("bot", "deep_fried_languages")
 BOT_COMMANDS = _load_config("bot", "commands")
 
 SOURCES_FILE = _load_config("sources", "file")
+
+LANGUAGES_DB_PATH = _load_config("db", "path")
+LANGUAGES_DB_TABLE_NAME = _load_config("db", "table_name")

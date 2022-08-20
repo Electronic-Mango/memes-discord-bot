@@ -57,3 +57,7 @@ bot:
 sources:
   # YAML file containing all sources for commands.
   file: sources.yml
+
+db:
+  path: languages.db
+  table_name: language
