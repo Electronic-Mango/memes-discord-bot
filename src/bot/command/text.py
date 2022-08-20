@@ -9,7 +9,7 @@ from disnake.ext.commands import Cog, Param, slash_command
 from disnake.utils import escape_markdown
 from more_itertools import sliced
 
-from db.wrapper import get_language, remove_language, store_language
+from db.client import get_language, remove_language, store_language
 from resources import get_random_text
 from settings import BOT_COMMANDS, BOT_DEEP_FRIED_LANGUAGES, BOT_MAX_TEXT_MESSAGE_LENGTH
 from translator import is_valid_language, supported_languages_matches, translate
