@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, MetaData, String, Table
+from sqlalchemy import Column, MetaData, String, Table
 
 from settings import LANGUAGES_DB_TABLE_NAME
 
