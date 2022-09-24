@@ -24,7 +24,6 @@ _GET = _MEDIA_GROUP["commands"]["get"]
 _GET_NAME = _GET.get("name")
 _GET_DESCRIPTION = _GET.get("description")
 
-# TODO: Change interval unit from "seconds" to "minutes"
 _PERIODIC_SUBGROUP = _MEDIA_GROUP["commands"]["periodic"]
 _PERIODIC_SUBGROUP_NAME = _PERIODIC_SUBGROUP.get("name")
 _PERIODIC_QUIET_HOURS = _PERIODIC_SUBGROUP.get("quiet_hours", [])
@@ -89,8 +88,8 @@ class MediaCog(Cog):
         if channel_id in self._periodic_channels:
             self._periodic_channels.pop(channel_id).cancel()
 
-    async def _periodic_media(self, channel, interval: int) -> None:
-        while not await sleep(interval):
+    async def _periodic_media(self, channel, interval_minutes: int) -> None:
+        while not await sleep(interval_minutes * 60):
             if datetime.now().hour in _PERIODIC_QUIET_HOURS:
                 self._logger.info(f"[{channel.id}] Quiet hour, skipping transmission")
                 continue
