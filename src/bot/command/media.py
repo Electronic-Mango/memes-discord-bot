@@ -26,12 +26,13 @@ _GET_DESCRIPTION = _GET.get("description")
 # TODO: Change interval unit from "seconds" to "minutes"
 # TODO: Move these to settings YAML
 _PERIODIC_GROUP_NAME = "periodic"
+
 _PERIODIC_ENABLE_NAME = "enable"
-_PERIODIC_ENABLE_DESCRIPTION = "Toggle periodic media"
+_PERIODIC_ENABLE_DESCRIPTION = "Enable periodic media"
 _PERIODIC_INTERVAL_PARAMETER_HINT = "How often media should be sent in seconds"
-_PERIODIC_INTERVAL_DEFAULT_SECONDS = 15
+
 _PERIODIC_DISABLE_NAME = "disable"
-_PERIODIC_DISABLE_DESCRIPTION = "Toggle periodic media"
+_PERIODIC_DISABLE_DESCRIPTION = "Disable periodic media"
 
 HELP_MESSAGE = f"""
 `/{_MEDIA_GROUP_NAME} {_GET_NAME}` - {_GET_DESCRIPTION}
@@ -62,25 +63,22 @@ class MediaCog(Cog):
     async def periodic_enable(
         self,
         interaction: CommandInteraction,
-        interval: int = Param(
-            default=_PERIODIC_INTERVAL_DEFAULT_SECONDS,
-            description=_PERIODIC_INTERVAL_PARAMETER_HINT,
-        ),
+        interval: int = Param(description=_PERIODIC_INTERVAL_PARAMETER_HINT),
     ) -> None:
         channel = interaction.channel
         channel_id = channel.id
         self._stop_periodic_media(channel_id)
         periodic_media_task = self._loop.create_task(self._periodic_media(channel, interval))
         self._periodic_channels[channel_id] = periodic_media_task
-        self._logger.info(f"[{channel_id}] Enabled periodic media with interval=[{interval}]")
-        await interaction.send(f"Sending periodic media with every {interval} seconds")
+        self._logger.info(f"[{channel_id}] Sending periodic media every {interval} seconds")
+        await interaction.send(f"Sending periodic media every {interval} seconds")
         await periodic_media_task
 
     @periodic.sub_command(name=_PERIODIC_DISABLE_NAME, description=_PERIODIC_DISABLE_DESCRIPTION)
     async def periodic_disable(self, interaction: CommandInteraction) -> None:
         channel_id = interaction.channel_id
         self._stop_periodic_media(channel_id)
-        self._logger.info(f"[{channel_id}] Disabled periodic media")
+        self._logger.info(f"[{channel_id}] Stopping periodic media")
         await interaction.send("Stopping periodic media")
 
     def _stop_periodic_media(self, channel_id: int) -> None:
