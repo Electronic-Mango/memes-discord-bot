@@ -32,6 +32,18 @@ bot:
           name: get
           # "/media get" command description which is displayed as command hint.
           description: Get a random media
+        # "/media periodic" command group.
+        periodic:
+          # "/media periodic" command group name, defines "periodic" part.
+          name: periodic
+          enable:
+            name: enable
+            description: Enable periodic media
+            # Hint related to interval of periodic transmissions.
+            autocomplete_hint: How often media should be sent in minutes
+          disable:
+            name: disable
+            description: Disable periodic media
     # Group of commands related to sending random text.
     # Parameters are similar as for "media" group and its commands.
     text_group:

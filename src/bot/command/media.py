@@ -24,15 +24,17 @@ _GET_NAME = _GET.get("name")
 _GET_DESCRIPTION = _GET.get("description")
 
 # TODO: Change interval unit from "seconds" to "minutes"
-# TODO: Move these to settings YAML
-_PERIODIC_GROUP_NAME = "periodic"
+_PERIODIC_SUBGROUP = _MEDIA_GROUP["commands"]["periodic"]
+_PERIODIC_SUBGROUP_NAME = _PERIODIC_SUBGROUP.get("name")
 
-_PERIODIC_ENABLE_NAME = "enable"
-_PERIODIC_ENABLE_DESCRIPTION = "Enable periodic media"
-_PERIODIC_INTERVAL_PARAMETER_HINT = "How often media should be sent in seconds"
+_PERIODIC_ENABLE = _PERIODIC_SUBGROUP["enable"]
+_PERIODIC_ENABLE_NAME = _PERIODIC_ENABLE.get("name")
+_PERIODIC_ENABLE_DESCRIPTION = _PERIODIC_ENABLE.get("description")
+_PERIODIC_INTERVAL_PARAMETER_HINT = _PERIODIC_ENABLE.get("autocomplete_hint")
 
-_PERIODIC_DISABLE_NAME = "disable"
-_PERIODIC_DISABLE_DESCRIPTION = "Disable periodic media"
+_PERIODIC_DISABLE = _PERIODIC_SUBGROUP["disable"]
+_PERIODIC_DISABLE_NAME = _PERIODIC_DISABLE.get("name")
+_PERIODIC_DISABLE_DESCRIPTION = _PERIODIC_DISABLE.get("description")
 
 HELP_MESSAGE = f"""
 `/{_MEDIA_GROUP_NAME} {_GET_NAME}` - {_GET_DESCRIPTION}
@@ -55,7 +57,7 @@ class MediaCog(Cog):
         await interaction.response.defer()
         await self._handle_new_media(interaction.send)
 
-    @media.sub_command_group(name=_PERIODIC_GROUP_NAME)
+    @media.sub_command_group(name=_PERIODIC_SUBGROUP_NAME)
     async def periodic(self, _: CommandInteraction) -> None:
         pass
 
