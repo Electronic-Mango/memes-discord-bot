@@ -20,6 +20,6 @@ def run_bot() -> None:
     bot.add_cog(OnReady(bot))
     bot.add_cog(OnApplicationCommand())
     bot.add_cog(HelpCog())
-    bot.add_cog(MediaCog())
+    bot.add_cog(MediaCog(bot.loop))
     bot.add_cog(TextCog())
     bot.run(BOT_TOKEN)

@@ -2,15 +2,16 @@
 Command Cog sending back a random media (image, GIFs, videos, etc.).
 """
 
+from asyncio import sleep
 from io import BytesIO
 from logging import getLogger
 from sys import getsizeof
 from typing import Callable
 
 from aiohttp import ClientSession
+from asyncio import AbstractEventLoop
 from disnake import CommandInteraction, File
-from disnake.ext import tasks
-from disnake.ext.commands import Cog, slash_command
+from disnake.ext.commands import Cog, Param, slash_command
 
 from resources import get_random_media_url
 from settings import BOT_COMMANDS, BOT_MAX_FILESIZE_BYTES
@@ -22,10 +23,15 @@ _GET = _MEDIA_GROUP["commands"]["get"]
 _GET_NAME = _GET.get("name")
 _GET_DESCRIPTION = _GET.get("description")
 
+# TODO: Change interval unit from "seconds" to "minutes"
 # TODO: Move these to settings YAML
-_PERIODIC_NAME = "periodic"
-_PERIODIC_DESCRIPTION = "Toggle periodic media"
-_PERIODIC_PERIOD_SECONDS = 15
+_PERIODIC_GROUP_NAME = "periodic"
+_PERIODIC_ENABLE_NAME = "enable"
+_PERIODIC_ENABLE_DESCRIPTION = "Toggle periodic media"
+_PERIODIC_INTERVAL_PARAMETER_HINT = "How often media should be sent in seconds"
+_PERIODIC_INTERVAL_DEFAULT_SECONDS = 15
+_PERIODIC_DISABLE_NAME = "disable"
+_PERIODIC_DISABLE_DESCRIPTION = "Toggle periodic media"
 
 HELP_MESSAGE = f"""
 `/{_MEDIA_GROUP_NAME} {_GET_NAME}` - {_GET_DESCRIPTION}
@@ -33,10 +39,10 @@ HELP_MESSAGE = f"""
 
 
 class MediaCog(Cog):
-    def __init__(self) -> None:
+    def __init__(self, event_loop: AbstractEventLoop) -> None:
+        self._loop = event_loop
         self._logger = getLogger(__name__)
-        self._periodic_channels = set()
-        self._periodic_media.start()
+        self._periodic_channels = dict()
 
     @slash_command(name=_MEDIA_GROUP_NAME)
     async def media(self, _: CommandInteraction) -> None:
@@ -48,21 +54,41 @@ class MediaCog(Cog):
         await interaction.response.defer()
         await self._handle_new_media(interaction.send)
 
-    @media.sub_command(name=_PERIODIC_NAME, description=_PERIODIC_DESCRIPTION)
-    async def periodic_media(self, interaction: CommandInteraction) -> None:
-        if (channel := interaction.channel) in self._periodic_channels:
-            self._periodic_channels.remove(channel)
-            self._logger.info(f"[{channel.id}] Channel added for periodic media")
-            await interaction.send("Channel removed")
-        else:
-            self._periodic_channels.add(channel)
-            self._logger.info(f"[{channel.id}] Channel removed from periodic media")
-            await interaction.send("Channel added")
+    @media.sub_command_group(name=_PERIODIC_GROUP_NAME)
+    async def periodic(self, _: CommandInteraction) -> None:
+        pass
 
-    @tasks.loop(seconds=_PERIODIC_PERIOD_SECONDS)
-    async def _periodic_media(self):
-        self._logger.info("Triggering periodic media transmissions")
-        for channel in self._periodic_channels:
+    @periodic.sub_command(name=_PERIODIC_ENABLE_NAME, description=_PERIODIC_ENABLE_DESCRIPTION)
+    async def periodic_enable(
+        self,
+        interaction: CommandInteraction,
+        interval: int = Param(
+            default=_PERIODIC_INTERVAL_DEFAULT_SECONDS,
+            description=_PERIODIC_INTERVAL_PARAMETER_HINT,
+        ),
+    ) -> None:
+        channel = interaction.channel
+        channel_id = channel.id
+        self._stop_periodic_media(channel_id)
+        periodic_media_task = self._loop.create_task(self._periodic_media(channel, interval))
+        self._periodic_channels[channel_id] = periodic_media_task
+        self._logger.info(f"[{channel_id}] Enabled periodic media with interval=[{interval}]")
+        await interaction.send(f"Sending periodic media with every {interval} seconds")
+        await periodic_media_task
+
+    @periodic.sub_command(name=_PERIODIC_DISABLE_NAME, description=_PERIODIC_DISABLE_DESCRIPTION)
+    async def periodic_disable(self, interaction: CommandInteraction) -> None:
+        channel_id = interaction.channel_id
+        self._stop_periodic_media(channel_id)
+        self._logger.info(f"[{channel_id}] Disabled periodic media")
+        await interaction.send("Stopping periodic media")
+
+    def _stop_periodic_media(self, channel_id: int) -> None:
+        if channel_id in self._periodic_channels:
+            self._periodic_channels.pop(channel_id).cancel()
+
+    async def _periodic_media(self, channel, interval: int) -> None:
+        while not await sleep(interval):
             self._logger.info(f"[{channel.id}] Sending periodic media")
             await self._handle_new_media(channel.send)
 
