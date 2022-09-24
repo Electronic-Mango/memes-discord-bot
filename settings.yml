@@ -36,6 +36,8 @@ bot:
         periodic:
           # "/media periodic" command group name, defines "periodic" part.
           name: periodic
+          # List of hours in 24h (without padded 0) format when bot won't send periodic media.
+          quiet_hours: [0, 1, 2, 3, 4, 5, 6, 7]
           enable:
             name: enable
             description: Enable periodic media

@@ -10,6 +10,7 @@ from typing import Callable
 
 from aiohttp import ClientSession
 from asyncio import AbstractEventLoop
+from datetime import datetime
 from disnake import CommandInteraction, File
 from disnake.ext.commands import Cog, Param, slash_command
 
@@ -26,6 +27,7 @@ _GET_DESCRIPTION = _GET.get("description")
 # TODO: Change interval unit from "seconds" to "minutes"
 _PERIODIC_SUBGROUP = _MEDIA_GROUP["commands"]["periodic"]
 _PERIODIC_SUBGROUP_NAME = _PERIODIC_SUBGROUP.get("name")
+_PERIODIC_QUIET_HOURS = _PERIODIC_SUBGROUP.get("quiet_hours", [])
 
 _PERIODIC_ENABLE = _PERIODIC_SUBGROUP["enable"]
 _PERIODIC_ENABLE_NAME = _PERIODIC_ENABLE.get("name")
@@ -72,8 +74,8 @@ class MediaCog(Cog):
         self._stop_periodic_media(channel_id)
         periodic_media_task = self._loop.create_task(self._periodic_media(channel, interval))
         self._periodic_channels[channel_id] = periodic_media_task
-        self._logger.info(f"[{channel_id}] Sending periodic media every {interval} seconds")
-        await interaction.send(f"Sending periodic media every {interval} seconds")
+        self._logger.info(f"[{channel_id}] Sending periodic media every {interval} minutes")
+        await interaction.send(f"Sending periodic media every {interval} minutes")
         await periodic_media_task
 
     @periodic.sub_command(name=_PERIODIC_DISABLE_NAME, description=_PERIODIC_DISABLE_DESCRIPTION)
@@ -89,6 +91,9 @@ class MediaCog(Cog):
 
     async def _periodic_media(self, channel, interval: int) -> None:
         while not await sleep(interval):
+            if datetime.now().hour in _PERIODIC_QUIET_HOURS:
+                self._logger.info(f"[{channel.id}] Quiet hour, skipping transmission")
+                continue
             self._logger.info(f"[{channel.id}] Sending periodic media")
             await self._handle_new_media(channel.send)
 
