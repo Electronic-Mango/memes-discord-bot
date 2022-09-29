@@ -172,12 +172,22 @@ There are default values in `settings.yml` which can be used as-is.
 
  * `/help` - prints a simple help message describing all commands
  * `/media get` - sends back a media item (image, GIF, video, etc)
+ * `/media periodic enable <interval>` - send periodic media with a given interval
+ * `/media periodic disable` - stop sending periodic media
  * `/text get` - sends back a text message
  * `/text deepfried` - sends back a "deep-fried" text message
  * `/text language set <language>` - sets language of text messages, `<language>` parameter is required but autocompletion for it is enabled
  * `/text language reset` - resets language of text messages to default
 
 Sources for media and texts are in `sources.yml` file, or whichever file is configured in `settings.yml`.
+
+
+### Periodic media
+
+Media items can be send back periodically via the appropriate command.
+Specified interval applies only to a given channel and can be changed between channels.
+
+**Currently channels where periodic media was enabled is not stored persistently and won't be restored after bot restart.**
 
 
 ### Text message language
