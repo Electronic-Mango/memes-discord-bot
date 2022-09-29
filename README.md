@@ -211,9 +211,13 @@ It can be however many languages as you'd like, just keep in mind, that each tra
 ## Data sources
 
 Both media and texts are retrieved from external services, like REST APIs.
-URLs to those APIs are defined in `sources.yml`, or whichever file is pointed to in `settings.yml`.
+URLs to those APIs are defined in a sources YAML file, by default `sources.yml`, or whichever file is pointed to in `settings.yml`.
 
-`sources.yml` has two main sections - `media` containing sources for media and `text` containing sources with texts.
+Sources YAML can be modified as the bot is running.
+New values will be used without having to restart the bot.
+YAML file is loaded every time values from it should be accessed.
+
+Sources YAML has two main sections - `media` containing sources for media and `text` containing sources with texts.
 
 **Sources for media should respond with URL to the media, not the media itself.**
 **Sources for texts should just respond with the text itself.**
