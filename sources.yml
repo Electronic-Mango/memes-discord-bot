@@ -12,6 +12,10 @@ media:
     keys:
       - other-source-key-1
       - other-source-key-2
+    # Keys used to extract transmitted file title.
+    # This field is optional. If it's not present path from URL is used instead.
+    title_keys:
+      - title-key
 
 text:
   - url: text-source-link-1

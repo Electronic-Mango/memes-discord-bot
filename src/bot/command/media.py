@@ -5,6 +5,7 @@ Command Cog sending back a random media (image, GIFs, videos, etc.).
 from asyncio import sleep
 from io import BytesIO
 from logging import getLogger
+from os.path import splitext
 from sys import getsizeof
 from typing import Callable
 
@@ -14,7 +15,7 @@ from datetime import datetime
 from disnake import CommandInteraction, File
 from disnake.ext.commands import Cog, Param, slash_command
 
-from resources import get_random_media_url
+from resources import get_random_media_url_and_title
 from settings import BOT_COMMANDS, BOT_MAX_FILESIZE_BYTES
 
 _MEDIA_GROUP = BOT_COMMANDS["media_group"]
@@ -97,17 +98,19 @@ class MediaCog(Cog):
             await self._handle_new_media(channel.send)
 
     async def _handle_new_media(self, sender: Callable) -> None:
-        media, url = await self._get_media()
-        while getsizeof(media) > BOT_MAX_FILESIZE_BYTES:
-            self._logger.info(f"[{url}] [{getsizeof(media)}] exceeds [{BOT_MAX_FILESIZE_BYTES}]")
-            media, url = await self._get_media()
-        await sender(file=File(media, url.split("/")[-1]))
+        media, url, title = await self._get_media()
+        while size := getsizeof(media) > BOT_MAX_FILESIZE_BYTES:
+            self._logger.info(f"[{url}] [{title}] [{size}] exceeds [{BOT_MAX_FILESIZE_BYTES}]")
+            media, url, title = await self._get_media()
+        url_filename, extension = splitext(url)
+        url_filename = url_filename.split("/")[-1]
+        await sender(file=File(media, f"{title or url_filename}{extension}"))
 
-    async def _get_media(self) -> tuple[bytes, str]:
-        media_url = await get_random_media_url()
-        media_bytes = await self._download_media(media_url)
-        self._logger.info(f"Trying to send [{media_url}] [{getsizeof(media_bytes)}] bytes")
-        return media_bytes, media_url
+    async def _get_media(self) -> tuple[bytes, str, str]:
+        url, title = await get_random_media_url_and_title()
+        media_bytes = await self._download_media(url)
+        self._logger.info(f"Trying to send [{url}] [{title}] [{getsizeof(media_bytes)}] bytes")
+        return media_bytes, url, title
 
     async def _download_media(self, url: str) -> bytes:
         async with ClientSession() as session:

@@ -23,21 +23,22 @@ _DEFAULT_LANGUAGE = "en"
 _logger = getLogger(__name__)
 
 
-async def get_random_media_url() -> str:
-    """Get a random media URL"""
+async def get_random_media_url_and_title() -> tuple[str, str]:
+    """Get a random media URL and its title"""
     source = choice(_MEDIA_SOURCES)
-    return await _get_resource(source)
+    response = await _load_resource_json(source)
+    url = _extract_resource(response, source.get("keys", []))
+    title = _extract_resource(response, source["title_keys"]) if "title_keys" in source else None
+    return url, title
 
 
 async def get_random_text() -> tuple[str, str]:
     """Get a random text and its language"""
     source = choice(_TEXT_SOURCES)
-    return await _get_resource(source), source.get("language", _DEFAULT_LANGUAGE)
-
-
-async def _get_resource(source: dict[str, Any]) -> str:
-    response_json = await _load_resource_json(source)
-    return _extract_resource_from_json(response_json, source.get("keys", []))
+    response = await _load_resource_json(source)
+    text = _extract_resource(response, source.get("keys", []))
+    language = source.get("language", _DEFAULT_LANGUAGE)
+    return text, language
 
 
 async def _load_resource_json(source: dict[str, Any]) -> dict[str, Any]:
@@ -58,5 +59,5 @@ async def _get_request_to_json(url: str, headers: dict[str, str]) -> dict[str, A
             return await response.json()
 
 
-def _extract_resource_from_json(json_resource: Any, keys: list[str]) -> str:
+def _extract_resource(json_resource: Any, keys: list[str]) -> str:
     return reduce(lambda json, key: json[key], keys, json_resource)

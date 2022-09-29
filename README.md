@@ -229,6 +229,7 @@ Source items for both sections are pretty much the same:
 |`url`|string|URL to get data from|no|—|
 |`keys`|list|keys where relevant data is located in received JSON|yes|raw output from source will be used|
 |`headers`|list|list of headers to add to request for this source|yes|no headers will be added to requests|
+|`title_keys`|list|keys used to extract filename for transmitted files|yes|—|
 |`language`|string|relevant only for text sources, contains language of texts from this source|yes|english|
 
 
@@ -307,6 +308,57 @@ Will cause these headers to be attached to GET request:
 ```
 
 You can also omit this parameter if no headers are required.
+
+
+### `title_keys`
+
+List of keys used to extract value for transmitted media filename from the JSON response.
+Keys are sorted from the least to most nested within the JSON.
+Resulting filename doesn't need extension.
+Extension is added based on extracted URL, taken from the very end of the URL.
+
+This field is optional, without it filename is selected based on media URL.
+
+For example, for this JSON response:
+
+```json
+{
+    "ID": "123",
+    "date": "2000-01-01",
+    "source": {
+        "source-id": 1,
+        "some other field": "some other value",
+        "URL": "https://some-kind.of/some-filename.jpg",
+        "title": "some kind of title"
+    }
+}
+```
+
+If `keys` is provided such as:
+
+```yaml
+keys:
+  - source
+  - URL
+```
+
+And `title_keys` is provided such as:
+
+```yaml
+title_keys:
+  - source
+  - title
+```
+
+Then resulting filename will use `some kind of title.jpg` as filename.
+Name itself is extracted based on `title_keys`, while extension is extracted based on `keys`.
+
+If `title_keys` is omitted, then resulting filename will be `some-filename.jpg`.
+Filename is extracted only based on `keys`.
+
+In general specifying filenames for transmitted media can be omitted.
+Media itself still will be transmitted without `title_keys`, just their filenames will be based only on their URL.
+
 
 ### `language`
 
