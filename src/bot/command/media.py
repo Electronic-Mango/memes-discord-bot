@@ -10,11 +10,11 @@ from sys import getsizeof
 from typing import Callable
 
 from aiohttp import ClientSession
-from asyncio import AbstractEventLoop
 from datetime import datetime
-from disnake import CommandInteraction, File
+from disnake import Client, CommandInteraction, File
 from disnake.ext.commands import Cog, Param, slash_command
 
+from db.client import get_all_periodic_media_data, remove_interval, store_interval
 from resources import get_random_media_url_and_title
 from settings import BOT_COMMANDS, BOT_MAX_FILESIZE_BYTES
 
@@ -44,10 +44,15 @@ HELP_MESSAGE = f"""
 
 
 class MediaCog(Cog):
-    def __init__(self, event_loop: AbstractEventLoop) -> None:
-        self._loop = event_loop
+    def __init__(self, bot: Client) -> None:
+        self._bot = bot
         self._logger = getLogger(__name__)
         self._periodic_channels = dict()
+
+    def initialize_periodic_tasks(self) -> None:
+        for channel_id, interval in get_all_periodic_media_data():
+            channel = self._bot.get_channel(channel_id)
+            self._create_periodic_media_task(channel, interval)
 
     @slash_command(name=_MEDIA_GROUP_NAME)
     async def media(self, _: CommandInteraction) -> None:
@@ -70,23 +75,27 @@ class MediaCog(Cog):
         interval: int = Param(description=_PERIODIC_INTERVAL_PARAMETER_HINT),
     ) -> None:
         channel = interaction.channel
-        channel_id = channel.id
-        self._stop_periodic_media(channel_id)
-        periodic_media_task = self._loop.create_task(self._periodic_media(channel, interval))
-        self._periodic_channels[channel_id] = periodic_media_task
-        self._logger.info(f"[{channel_id}] Sending periodic media every {interval} minutes")
+        self._stop_periodic_media(channel.id)
+        self._create_periodic_media_task(channel, interval)
+        store_interval(channel.id, interval)
         await interaction.send(f"Sending periodic media every {interval} minutes")
 
     @periodic.sub_command(name=_PERIODIC_DISABLE_NAME, description=_PERIODIC_DISABLE_DESCRIPTION)
     async def periodic_disable(self, interaction: CommandInteraction) -> None:
         channel_id = interaction.channel_id
         self._stop_periodic_media(channel_id)
+        remove_interval(channel_id)
         self._logger.info(f"[{channel_id}] Stopping periodic media")
         await interaction.send("Stopping periodic media")
 
     def _stop_periodic_media(self, channel_id: int) -> None:
         if channel_id in self._periodic_channels:
             self._periodic_channels.pop(channel_id).cancel()
+
+    def _create_periodic_media_task(self, channel, interval: int) -> None:
+        periodic_media_task = self._bot.loop.create_task(self._periodic_media(channel, interval))
+        self._periodic_channels[channel.id] = periodic_media_task
+        self._logger.info(f"[{channel.id}] Sending periodic media every {interval} minutes")
 
     async def _periodic_media(self, channel, interval_minutes: int) -> None:
         while not await sleep(interval_minutes * 60):

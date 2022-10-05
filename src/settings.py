@@ -42,5 +42,6 @@ BOT_COMMANDS = _load_config("bot", "commands")
 
 SOURCES_FILE = _load_config("sources", "file")
 
-LANGUAGES_DB_PATH = _load_config("db", "path")
-LANGUAGES_DB_TABLE_NAME = _load_config("db", "table_name")
+CHANNEL_DATA_DB_PATH = _load_config("db", "path")
+LANGUAGES_DB_TABLE_NAME = _load_config("db", "languages_table_name")
+PERIODIC_DB_TABLE_NAME = _load_config("db", "periodic_table_name")

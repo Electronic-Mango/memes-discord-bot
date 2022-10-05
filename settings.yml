@@ -76,6 +76,8 @@ sources:
 
 db:
   # Path to SQLite DB file storing configured text language per Discord channel.
-  path: languages.db
-  # Table name withing SQLite DB used for storing languages.
-  table_name: language
+  path: channel_data.db
+  # Table name within SQLite DB used for storing languages.
+  languages_table_name: language
+  # Table name within SQLite DB used for storing periodic media data.
+  periodic_table_name: periodic

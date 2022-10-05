@@ -16,10 +16,10 @@ from settings import BOT_TOKEN
 def run_bot() -> None:
     """Create, configure and run the bot"""
     bot = InteractionBot()
-    bot.add_cog(OnConnect(bot))
-    bot.add_cog(OnReady(bot))
-    bot.add_cog(OnApplicationCommand())
-    bot.add_cog(HelpCog())
-    bot.add_cog(MediaCog(bot.loop))
+    bot.add_cog(media_cog := MediaCog(bot))
     bot.add_cog(TextCog())
+    bot.add_cog(HelpCog())
+    bot.add_cog(OnApplicationCommand())
+    bot.add_cog(OnConnect(bot))
+    bot.add_cog(OnReady(bot, media_cog))
     bot.run(BOT_TOKEN)
