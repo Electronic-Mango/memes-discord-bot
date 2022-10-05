@@ -76,7 +76,6 @@ class MediaCog(Cog):
         self._periodic_channels[channel_id] = periodic_media_task
         self._logger.info(f"[{channel_id}] Sending periodic media every {interval} minutes")
         await interaction.send(f"Sending periodic media every {interval} minutes")
-        await periodic_media_task
 
     @periodic.sub_command(name=_PERIODIC_DISABLE_NAME, description=_PERIODIC_DISABLE_DESCRIPTION)
     async def periodic_disable(self, interaction: CommandInteraction) -> None:
