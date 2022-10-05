@@ -15,11 +15,12 @@ A simple Discord bot sending random images, GIFs, videos and texts via Discord, 
 - [Configuration](#configuration)
   - [Overwriting default values](#overwriting-default-values)
   - [Docker configuration](#docker-configuration)
-  - [Storing configured language per Discord channel](#storing-configured-language-per-discord-channel)
+  - [Storing persistent channel data](#storing-persistent-channel-data)
 - [Running the bot](#running-the-bot)
   - [From source](#from-source)
   - [Docker](#docker)
 - [Commands](#commands)
+  - [Periodic media](#periodic-media)
   - [Text message language](#text-message-language)
   - [Deep-fried text messages](#deep-fried-text-messages)
 - [Data sources](#data-sources)
@@ -97,29 +98,35 @@ This will require rebuilding the image every time you make a change, even to the
 To get around this, you can define a mounted volume in `docker-compose.yml` with your custom settings YAML and modify value of `CUSTOM_SETTINGS_PATH` accordingly.
 
 
-### Storing configured language per Discord channel
+### Storing persistent channel data
 
-Languages for texts in a given Discord channel are stored in a SQLite database.
-You can configure its location and table name via `settings.yml`:
+Bot stores two types of data in its SQLite database:
+
+1. Languages for texts per channel via `/text language set` command
+1. Intervals used for periodic media per channel via `/media periodic enable` command
+
+Default languages are not stored.
+Restoring language to default removes language data about current channel from the database.
+Similarly stopping periodic media removes current channel interval data.
+
+You can configure DB location and table name via settings YAML:
 
 ```yml
 db:
   # Path to SQLite DB file storing configured text language per Discord channel.
-  path: languages.db
-  # Table name withing SQLite DB used for storing languages.
-  table_name: language
+  path: channel_data.db
+  # Table name within SQLite DB used for storing languages.
+  languages_table_name: language
+  # Table name within SQLite DB used for storing periodic media data.
+  periodic_table_name: periodic
 ```
 
 In case of Docker deployment you might want to store DB file in a mounted volume, rather than in the container itself.
 This way data won't be lost if you recreate the container.
 
-This applies only when user changed the default language via `/text language set` command.
-Default languages are not stored in the database.
-
-Restoring the language to default, via `/text language reset` command, removes data about current channel from the database.
-
-The only data stored is channel ID and selected language.
-Full table schema is as follows:
+The stored data is channel ID and selected language, or interval.
+Language and intervals are stored in separate tables for easier access.
+Full tables schema is as follows:
 
 ```sql
 CREATE TABLE language (
@@ -127,9 +134,15 @@ CREATE TABLE language (
         language VARCHAR NOT NULL, 
         PRIMARY KEY (channel_id)
 );
+
+CREATE TABLE periodic (
+        channel_id INTEGER NOT NULL, 
+        interval INTEGER NOT NULL, 
+        PRIMARY KEY (channel_id)
+);
 ```
 
-Where name table name, here it's `language`, can be configured in `settings.yml`.
+Names of both tables can be configured settings YAML.
 
 
 
@@ -179,15 +192,14 @@ There are default values in `settings.yml` which can be used as-is.
  * `/text language set <language>` - sets language of text messages, `<language>` parameter is required but autocompletion for it is enabled
  * `/text language reset` - resets language of text messages to default
 
-Sources for media and texts are in `sources.yml` file, or whichever file is configured in `settings.yml`.
+Sources for media and texts are in `sources.yml` file, or whichever file is configured in settings YAML.
 
 
 ### Periodic media
 
 Media items can be send back periodically via the appropriate command.
 Specified interval applies only to a given channel and can be changed between channels.
-
-**Currently channels where periodic media was enabled is not stored persistently and won't be restored after bot restart.**
+Intervals for given channel are stored in SQLite DB, alongside output text language for `text` command.
 
 
 ### Text message language
@@ -203,7 +215,7 @@ Before a text from a source is send back, it's translated through multiple langu
 
 Translating between multiple different languages causes texts to be weirdly distorted and strange, which is the point of this command.
 
-Intermediate languages can be configured via `settings.yml`.
+Intermediate languages can be configured via settings YAML.
 It can be however many languages as you'd like, just keep in mind, that each translation does take some time.
 
 
@@ -211,7 +223,7 @@ It can be however many languages as you'd like, just keep in mind, that each tra
 ## Data sources
 
 Both media and texts are retrieved from external services, like REST APIs.
-URLs to those APIs are defined in a sources YAML file, by default `sources.yml`, or whichever file is pointed to in `settings.yml`.
+URLs to those APIs are defined in a sources YAML file, by default `sources.yml`, or whichever file is pointed to in settings YAML.
 
 Sources YAML can be modified as the bot is running.
 New values will be used without having to restart the bot.
@@ -388,10 +400,10 @@ You can check example `sources.yml` file in the project root for more examples o
 
 Discord limits how large files can be send in a message.
 
-Max file to send is defined in `settings.yml` under `max_filesize_bytes`, by default it's 8MB.
+Max file to send is defined in settings YAML under `max_filesize_bytes`, by default it's 8MB.
 If file downloaded from a source is too large a new one is selected and downloaded, until one under 8MB is found.
 Keep this in mind when selecting sources, since downloading large files can slow down the bot.
 
-Max length of text message is defined in `settings.yml` under `max_text_message_length`, by default it's 2000 characters.
+Max length of text message is defined in settings YAML under `max_text_message_length`, by default it's 2000 characters.
 Longer messages will be split into multiple messages, each up to `max_text_message_length` characters long.
 Bot doesn't try and do this in any smart way, it just splits after `max_text_message_length` characters, so words can be split in half.
