@@ -6,6 +6,7 @@ from asyncio import sleep
 from io import BytesIO
 from logging import getLogger
 from os.path import splitext
+from re import fullmatch
 from sys import getsizeof
 from typing import Callable
 
@@ -45,6 +46,9 @@ HELP_MESSAGE = f"""
 `/{_MEDIA_GROUP_NAME} {_PERIODIC_SUBGROUP_NAME} {_PERIODIC_DISABLE_NAME}`\
  - {_PERIODIC_DISABLE_DESCRIPTION}
 """
+
+_INVALID_FILENAME_PATTERN = r"[./\\]+"
+_DEFAULT_FILENAME = "file"
 
 
 class MediaCog(Cog):
@@ -116,7 +120,8 @@ class MediaCog(Cog):
             media, url, title = await self._get_media()
         url_filename, extension = splitext(url)
         url_filename = url_filename.split("/")[-1]
-        await sender(file=File(media, f"{title or url_filename}{extension}"))
+        filename = f"{self._select_filename(title, url_filename)}{extension}"
+        await sender(file=File(media, filename))
 
     async def _get_media(self) -> tuple[bytes, str, str]:
         url, title = await get_random_media_url_and_title()
@@ -128,3 +133,14 @@ class MediaCog(Cog):
         async with ClientSession() as session:
             async with session.get(url) as response:
                 return BytesIO(await response.read())
+
+    def _select_filename(self, title: str, url_filename: str) -> str:
+        if self._filename_is_valid(title):
+            return title
+        elif self._filename_is_valid(url_filename):
+            return url_filename
+        else:
+            return _DEFAULT_FILENAME
+
+    def _filename_is_valid(self, filename: str) -> bool:
+        return filename is not None and not fullmatch(_INVALID_FILENAME_PATTERN, filename)
