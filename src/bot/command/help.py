@@ -12,7 +12,7 @@ _FULL_HELP_MESSAGE = "\n".join([MEDIA_HELP_MESSAGE.strip(), TEXT_HELP_MESSAGE.st
 
 
 class HelpCog(Cog):
-    @slash_command(name="help", description="Get help information for the bot")
-    async def media(self, interaction: CommandInteraction) -> None:
-        """Send back a 'help' message"""
+    @slash_command()
+    async def help(self, interaction: CommandInteraction) -> None:
+        """Get help information for the bot"""
         await interaction.send(_FULL_HELP_MESSAGE, ephemeral=True)
