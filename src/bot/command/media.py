@@ -111,7 +111,7 @@ class MediaCog(Cog):
                 self._logger.info(f"[{channel.id}] Quiet hour, skipping transmission")
                 continue
             self._logger.info(f"[{channel.id}] Sending periodic media")
-            await self._handle_new_media(channel.send)
+            self._bot.loop.create_task(self._handle_new_media(channel.send))
 
     async def _handle_new_media(self, sender: Callable) -> None:
         media, url, title = await self._get_media()
