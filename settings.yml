@@ -46,6 +46,9 @@ bot:
           disable:
             name: disable
             description: Disable periodic media
+          list:
+            name: list
+            description: List all periodic channels
     # Group of commands related to sending random text.
     # Parameters are similar as for "media" group and its commands.
     text_group:

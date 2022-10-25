@@ -39,12 +39,18 @@ _PERIODIC_DISABLE = _PERIODIC_SUBGROUP["disable"]
 _PERIODIC_DISABLE_NAME = _PERIODIC_DISABLE.get("name")
 _PERIODIC_DISABLE_DESCRIPTION = _PERIODIC_DISABLE.get("description")
 
+_PERIODIC_LIST = _PERIODIC_SUBGROUP["list"]
+_PERIODIC_LIST_NAME = _PERIODIC_LIST.get("name")
+_PERIODIC_LIST_DESCRIPTION = _PERIODIC_LIST.get("description")
+
 HELP_MESSAGE = f"""
 `/{_MEDIA_GROUP_NAME} {_GET_NAME}` - {_GET_DESCRIPTION}
 `/{_MEDIA_GROUP_NAME} {_PERIODIC_SUBGROUP_NAME} {_PERIODIC_ENABLE_NAME} <interval>`\
  - {_PERIODIC_ENABLE_DESCRIPTION}
 `/{_MEDIA_GROUP_NAME} {_PERIODIC_SUBGROUP_NAME} {_PERIODIC_DISABLE_NAME}`\
  - {_PERIODIC_DISABLE_DESCRIPTION}
+`/{_MEDIA_GROUP_NAME} {_PERIODIC_SUBGROUP_NAME} {_PERIODIC_LIST_NAME}`\
+ - {_PERIODIC_LIST_DESCRIPTION}
 """
 
 _INVALID_FILENAME_PATTERN = r"[./\\]+"
@@ -95,6 +101,16 @@ class MediaCog(Cog):
         remove_interval(channel_id)
         self._logger.info(f"[{channel_id}] Stopping periodic media")
         await interaction.send("Stopping periodic media")
+
+    @periodic.sub_command(name=_PERIODIC_LIST_NAME, description=_PERIODIC_LIST_DESCRIPTION)
+    async def periodic_list(self, interaction: CommandInteraction) -> None:
+        if not self._periodic_channels:
+            await interaction.send("No periodic media enabled", ephemeral=True)
+            return
+        channels = [self._bot.get_channel(id) for id in self._periodic_channels.keys()]
+        message = "Sending media to:\n"
+        message += "\n".join(f"- {channel.guild} - **{channel.name}**" for channel in channels)
+        await interaction.send(message, ephemeral=True)
 
     def _stop_periodic_media(self, channel_id: int) -> None:
         if channel_id in self._periodic_channels:
