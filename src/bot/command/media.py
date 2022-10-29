@@ -64,6 +64,9 @@ class MediaCog(Cog):
         self._periodic_channels = dict()
 
     def initialize_periodic_tasks(self) -> None:
+        if self._periodic_channels:
+            self._logger.warn("Periodic media already initialized!")
+            return
         for channel_id, interval in get_all_periodic_media_data():
             channel = self._bot.get_channel(channel_id)
             self._create_periodic_media_task(channel, interval)
