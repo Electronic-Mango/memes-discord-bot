@@ -29,5 +29,5 @@ requests>=2.31.0
 soupsieve==2.3.2.post1
 SQLAlchemy==1.4.40
 tomli==2.0.1
-urllib3==1.26.11
+urllib3==1.26.18
 yarl==1.8.1
