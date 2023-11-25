@@ -59,7 +59,7 @@ def remove_interval(channel_id: int) -> None:
     """Remove stored interval for a given Discord channel ID"""
     _logger.info(f"Removing [{channel_id}]")
     with Session(_engine) as session:
-        query = delete(PeriodicModel).where(LanguageModel.channel_id == channel_id)
+        query = delete(PeriodicModel).where(PeriodicModel.channel_id == channel_id)
         session.execute(query)
         session.commit()
 
