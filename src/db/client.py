@@ -5,7 +5,7 @@ Wrapper for SQLite DB, used for storing languages per Discord channel.
 from logging import getLogger
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import mapper, sessionmaker
+from sqlalchemy.orm import registry, sessionmaker
 
 from db.model import LanguageModel, PeriodicModel
 from db.table import languages_table, periodic_table
@@ -19,9 +19,9 @@ _session = sessionmaker(_engine)
 def initialize_database() -> None:
     """Initialize DB, map model with table, create table if necessary"""
     _logger.info(f"Initializing the DB [{_engine}]")
-    mapper(LanguageModel, languages_table)
+    registry.map_imperatively(LanguageModel, languages_table)
     languages_table.create(_engine, checkfirst=True)
-    mapper(PeriodicModel, periodic_table)
+    registry.map_imperatively(PeriodicModel, periodic_table)
     periodic_table.create(_engine, checkfirst=True)
 
 
