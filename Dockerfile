@@ -1,8 +1,8 @@
 # Dockerfile which can be used for deploying the bot as a Docker container.
 
-FROM python:3.10-slim
+FROM python:3.10-alpine
 
-RUN pip install --no-cache-dir --upgrade pip
+RUN apk add gcc g++ musl-dev
 
 WORKDIR /app
 
