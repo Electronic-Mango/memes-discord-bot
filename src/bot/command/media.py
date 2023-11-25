@@ -3,6 +3,7 @@ Command Cog sending back a random media (image, GIFs, videos, etc.).
 """
 
 from asyncio import sleep
+from datetime import datetime
 from io import BytesIO
 from logging import getLogger
 from os.path import splitext
@@ -11,7 +12,6 @@ from sys import getsizeof
 from typing import Callable
 
 from aiohttp import ClientSession
-from datetime import datetime
 from disnake import Client, CommandInteraction, File
 from disnake.ext.commands import Cog, Param, slash_command
 
