@@ -1,20 +1,25 @@
-class LanguageModel:
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+from settings import LANGUAGES_DB_TABLE_NAME, PERIODIC_DB_TABLE_NAME
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class LanguageModel(Base):
     """DB model used for storing languages per Discord channel"""
 
-    def __init__(self, channel_id: int, language: str) -> None:
-        self.channel_id = channel_id
-        self.language = language
+    __tablename__ = LANGUAGES_DB_TABLE_NAME
 
-    def __str__(self) -> str:
-        return f"{self.channel_id} {self.language}"
+    channel_id: Mapped[int] = mapped_column(primary_key=True)
+    language: Mapped[int] = mapped_column(nullable=False)
 
 
-class PeriodicModel:
+class PeriodicModel(Base):
     """DB model used for storing periodic media data per Discord channel"""
 
-    def __init__(self, channel_id: int, interval: int) -> None:
-        self.channel_id = channel_id
-        self.interval = interval
+    __tablename__ = PERIODIC_DB_TABLE_NAME
 
-    def __str__(self) -> str:
-        return f"{self.channel_id} {self.interval}"
+    channel_id: Mapped[int] = mapped_column(primary_key=True)
+    interval: Mapped[int] = mapped_column(nullable=False)
