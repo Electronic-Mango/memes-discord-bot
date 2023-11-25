@@ -82,7 +82,7 @@ Keep in mind, that when overwriting list entries entire list will be replaced, t
 
 ### Docker configuration
 
-There's a `Dockerfile` in the repo, which will build a Docker image for the bot using `python:3.10-slim` as base.
+There's a `Dockerfile` in the repo, which will build a Docker image for the bot using `python:3.10-alpine` as base.
 
 You can also use `docker-compose.yml` to build and start the container via:
 ```bash
