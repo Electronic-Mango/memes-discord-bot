@@ -44,7 +44,7 @@ Or cute pictures of cats.
 Overall usage can be pretty generic.
 
 You can check my other repository [Memes Discord bot Docker deployment](https://github.com/Electronic-Mango/memes-discord-bot-docker-deployment) for an example of how you can deploy this bot to send back memes via Docker Compose.
-It also uses my [Reddit API API](https://github.com/Electronic-Mango/reddit-api-api) to access Reddit posts.
+It also uses my [Reddit API API](https://github.com/Electronic-Mango/reddit-fastapi-api) to access Reddit posts.
 
 
 
