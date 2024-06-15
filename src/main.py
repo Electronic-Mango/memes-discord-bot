@@ -5,7 +5,7 @@ Configures logging and starts the bot.
 
 from logging import INFO, basicConfig
 
-from bot.bot import run_bot
+from bot.discord_bot import run_bot
 from db.client import initialize_database
 
 
