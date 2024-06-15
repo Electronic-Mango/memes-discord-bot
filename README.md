@@ -39,7 +39,7 @@ Memes!
 At least that's what I use this bot for.
 You can supply media sources for some memes and text sources for copypastas from the internet and get yourself a nice memes Discord bot.
 
-Or you can use it to send inspirational quotes and images if it suites you more.
+Or you can use it to send inspirational quotes and images if it suits you more.
 Or cute pictures of cats.
 Overall usage can be pretty generic.
 
@@ -92,7 +92,7 @@ docker compose up -d --build
 `Dockerfile` will copy all YAML files from the project root into the image.
 Specifically it will copy all files with `.yml` extension.
 
-`docker-compose.yml` defines `CUSTOM_SETTINGS_PATH` environment variable as `custom_settings.yml`, so you can create and fill `custom_settings.yml` with values overwritting ones from default `settings.yml` without modifying project files.
+`docker-compose.yml` defines `CUSTOM_SETTINGS_PATH` environment variable as `custom_settings.yml`, so you can create and fill `custom_settings.yml` with values overwriting ones from default `settings.yml` without modifying project files.
 
 This will require rebuilding the image every time you make a change, even to the custom one.
 To get around this, you can define a mounted volume in `docker-compose.yml` with your custom settings YAML and modify value of `CUSTOM_SETTINGS_PATH` accordingly.
@@ -103,7 +103,7 @@ To get around this, you can define a mounted volume in `docker-compose.yml` with
 Bot stores two types of data in its SQLite database:
 
 1. Languages for texts per channel via `/text language set` command
-1. Intervals used for periodic media per channel via `/media periodic enable` command
+2. Intervals used for periodic media per channel via `/media periodic enable` command
 
 Default languages are not stored.
 Restoring language to default removes language data about current channel from the database.
@@ -154,22 +154,22 @@ You can run the bot from source, or in a Docker container.
 ### From source
 
  1. Create a Discord bot.
- 1. Install all packages from `requirements.txt`.
- 1. Fill missing values in `settings.yml` (mainly Discord bot token), or supply custom `settings.yml` file with overwritting values.
- 1. Execute `src/main.py` via Python.
+ 2. Install all packages from `requirements.txt`.
+ 3. Fill missing values in `settings.yml` (mainly Discord bot token), or supply custom `settings.yml` file with overwriting values.
+ 4. Execute `src/main.py` via Python.
 
 
 ### Docker
 
  1. Create a Discord bot.
- 1. Create and fill `custom_settings.yml` file with overwritting values from `settings.yml`, mainly Discord bot token.
+ 2. Create and fill `custom_settings.yml` file with overwriting values from `settings.yml`, mainly Discord bot token.
     You can also fill `settings.yml` directly.
     Or you can modify `docker-compose.yml` to load custom `settings.yml` from a mounted volume, rather than from a file in the docker image.
- 1. Run `docker compose up -d --build` in terminal.
+ 3. Run `docker compose up -d --build` in terminal.
 
 You can skip the `--build` flag if you didn't modify the source code (or `custom_settings.yml` file).
 
-By default all YAML files from the project root are added to the Docker image.
+By default, all YAML files from the project root are added to the Docker image.
 If you don't want to rebuild the image every time you modify `settings.yml` or `custom_settings.yml` you can load custom one from a mounted volume.
 This will require modification to `docker-compose.yml`.
 
@@ -197,7 +197,7 @@ Sources for media and texts are in `sources.yml` file, or whichever file is conf
 
 ### Periodic media
 
-Media items can be send back periodically via the appropriate command.
+Media items can be sent back periodically via the appropriate command.
 Specified interval applies only to a given channel and can be changed between channels.
 Intervals for given channel are stored in SQLite DB, alongside output text language for `text` command.
 
@@ -211,7 +211,7 @@ Translation is done through [`deep_translator`](https://github.com/nidhaloff/dee
 ### Deep-fried text messages
 
 What does it mean?
-Before a text from a source is send back, it's translated through multiple languages, then to either original language or target language configured via `/text language set` command.
+Before a text from a source is sent back, it's translated through multiple languages, then to either original language or target language configured via `/text language set` command.
 
 Translating between multiple different languages causes texts to be weirdly distorted and strange, which is the point of this command.
 
@@ -398,7 +398,7 @@ You can check example `sources.yml` file in the project root for more examples o
 
 ## Media and text size limits
 
-Discord limits how large files can be send in a message.
+Discord limits how large files can be sent in a message.
 
 Max file to send is defined in settings YAML under `max_filesize_bytes`, by default it's 8MB.
 If file downloaded from a source is too large a new one is selected and downloaded, until one under 8MB is found.

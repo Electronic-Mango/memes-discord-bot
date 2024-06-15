@@ -9,12 +9,12 @@ bot:
   # Max possible filesize, by default on Discord it's 8MB.
   max_filesize_bytes: 8000000
   # Max character length for text messages, longer messages will be split into multiple messages.
-  # By default Discord allows 2000 characters.
+  # By default, Discord allows 2000 characters.
   max_text_message_length: 2000
   # Intermediate languages used to "deep-fry" messages.
   # Messages are being translated to those languages in sequence,
   # then either to original or configured by users.
-  # When overwritting you must provide full list of languages, the full list will be replaced.
+  # When overwriting you must provide full list of languages, the full list will be replaced.
   deep_fried_languages:
     - km
     - gu
