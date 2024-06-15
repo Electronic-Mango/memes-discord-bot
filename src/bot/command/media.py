@@ -65,7 +65,7 @@ class MediaCog(Cog):
 
     def initialize_periodic_tasks(self) -> None:
         if self._periodic_channels:
-            self._logger.warn("Periodic media already initialized!")
+            self._logger.warning("Periodic media already initialized!")
             return
         for channel_id, interval in get_all_periodic_media_data():
             channel = self._bot.get_channel(channel_id)
@@ -142,13 +142,13 @@ class MediaCog(Cog):
         filename = f"{self._select_filename(title, url_filename)}{extension}"
         await sender(file=File(media, filename))
 
-    async def _get_media(self) -> tuple[bytes, str, str]:
+    async def _get_media(self) -> tuple[BytesIO, str, str]:
         url, title = await get_random_media_url_and_title()
         media_bytes = await self._download_media(url)
         self._logger.info(f"Trying to send [{url}] [{title}] [{getsizeof(media_bytes)}] bytes")
         return media_bytes, url, title
 
-    async def _download_media(self, url: str) -> bytes:
+    async def _download_media(self, url: str) -> BytesIO:
         async with ClientSession() as session:
             async with session.get(url) as response:
                 return BytesIO(await response.read())

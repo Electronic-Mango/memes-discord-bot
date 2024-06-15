@@ -64,12 +64,12 @@ def remove_interval(channel_id: int) -> None:
         session.commit()
 
 
-def get_all_periodic_media_data() -> list[tuple[str, str]]:
+def get_all_periodic_media_data() -> list[tuple[int, int]]:
     """Get all stored periodic media data"""
     _logger.info("Getting all stored periodic media data")
     with Session(_engine) as session:
         query = select(PeriodicModel)
-        all_periodic_data = session.scalars(query).all()
-        parsed_periodic_data = [(entry.channel_id, entry.interval) for entry in all_periodic_data]
+        all_data = session.scalars(query).all()
+        parsed_periodic_data = [(int(entry.channel_id), int(entry.interval)) for entry in all_data]
         _logger.info(f"Found {parsed_periodic_data}")
         return parsed_periodic_data
